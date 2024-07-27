@@ -35,7 +35,6 @@ services:
       - ${HTTPD_LOG_DIRECTORY}:/var/log/nginx
     depends_on:
       - asd_php
-      - asd_db
 
   asd_php:
     container_name: ${PHP_CONTAINER}
@@ -73,84 +72,7 @@ services:
       - ${CODE_DIRECTORY}:/app
     command: install
 
-#  asd_db:
-#    image: mysql:${MYSQL_VERSION}
-#    container_name: ${MYSQL_CONTAINER}
-#    env_file:
-#      - ".env"
-#    build:
-#      dockerfile: ${MYSQL_DOCKERFILE_DIRECTORY}/Dockerfile
-#      context: .
-#    security_opt:
-#      - seccomp:unconfined
-#    ports:
-#      - ${MYSQL_PORT}:3306
-#    environment:
-#      - MYSQL_DATABASE=${MYSQL_DATABASE}
-#      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-#      - MYSQL_USER=${MYSQL_USER}
-#      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-#      - MYSQL_LOG_CONSOLE=${MYSQL_LOG_ENABLED}
-#    networks:
-#      - ${NETWORK}
-#    volumes:
-#      - ${MYSQL_INIT_DB_DIRECTORY}:/docker-entrypoint-initdb.d
-#      - ${MYSQL_CONFIG_DB_DIRECTORY}/my.cnf:/etc/mysql/conf.d/my.cnf
-#
-#  asd_db_test:
-#    image: mysql:${MYSQL_VERSION}
-#    container_name: ${MYSQL_TEST_CONTAINER}
-#    env_file:
-#      - ".env"
-#    build:
-#      dockerfile: ${MYSQL_TEST_DOCKERFILE_DIRECTORY}/Dockerfile
-#      context: .
-##   https://github.com/docker-library/mysql/issues/422
-##   https://stackoverflow.com/questions/55559386/how-to-fix-mbind-operation-not-permitted-in-mysql-error-log
-#    security_opt:
-#      - seccomp:unconfined
-#    ports:
-#      - ${MYSQL_TEST_PORT}:3306
-#    environment:
-#      - MYSQL_DATABASE=${MYSQL_TEST_DATABASE}
-#      - MYSQL_ROOT_PASSWORD=${MYSQL_TEST_ROOT_PASSWORD}
-#      - MYSQL_USER=${MYSQL_TEST_USER}
-#      - MYSQL_PASSWORD=${MYSQL_TEST_PASSWORD}
-#      - MYSQL_LOG_CONSOLE=${MYSQL_LOG_ENABLED}
-#    networks:
-#      - ${NETWORK}
-#    volumes:
-#      - ${MYSQL_TEST_INIT_DB_DIRECTORY}:/docker-entrypoint-initdb.d
-#      - ${MYSQL_TEST_CONFIG_DB_DIRECTORY}/my.cnf:/etc/mysql/conf.d/my.cnf
-#
-#  asd_mongo:
-#    image: ${MONGO_IMAGE}
-#    container_name: ${MONGO_CONTAINER}
-#    networks:
-#      - ${NETWORK}
-#    ports:
-#      - ${MONGO_PORT}:${MONGO_PORT}
-#    volumes:
-#      - mongo_data:/data/db
-#    command: mongod
-#    environment:
-#      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-#      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-#      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-#
-#  asd_redis:
-#    image: redis:${REDIS_VERSION}
-#    container_name: ${REDIS_CONTAINER}
-#    ports:
-#      - ${REDIS_PORT}:6379
-#    command: redis-server --save 20 1 --loglevel warning
-#    volumes:
-#      - cache:/data
-#    networks:
-#      - ${NETWORK}
-
 volumes:
-#  mongo_data:
   cache:
     driver: local
 

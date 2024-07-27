@@ -41,7 +41,6 @@ RUN pecl update-channels
 RUN pecl install mcrypt-1.0.7 && docker-php-ext-enable mcrypt
 RUN pecl install redis && docker-php-ext-enable redis
 RUN pecl install xdebug && docker-php-ext-enable xdebug
-RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 RUN wget -O /usr/local/bin/phpunit https://phar.phpunit.de/phpunit-11.phar && chmod +x /usr/local/bin/phpunit
 
@@ -77,7 +76,7 @@ COPY ./etc/php/changeuser.sh /home/
 RUN chmod +x /home/changeuser.sh
 RUN /home/changeuser.sh
 
-WORKDIR /var/www/egatebe
+WORKDIR /var/www/asd
 USER www-data
 
 EXPOSE 9003
