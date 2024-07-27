@@ -1,0 +1,59 @@
+{
+    "DAAD": {
+        "comment": "DAAD section to keep backguard compatibility",
+        "objno": "valid object number"
+    },
+    "uuid": "Object identifier",
+    "name": "name of the object",
+    "description": {
+        "normal": "description of the scene when the user came in",
+        "odor": "Odor description, it is optional",
+        "sound": "Sound description if there are any sound in the scene. It is optional"
+    },
+    "image": "path or base64 of image to represent the object",
+    "weight": "weight of the object",
+    "location": "where the object is placed",
+    "nouns": ["list of nouns list of the possible words that reference the object."],
+    "attributes": {
+        "probability that the object has been taken by the character. Just in case that is a random probability",
+        "used": "true of the object has been used, false otherwise",
+        "wearable": "true if the object has been wearable, otherwise false",
+        "portable": "true if the object has been portable, otherwise false",
+        "catchable": "true if the object can be catchable, otherwise false",
+        "droppable": "true if the object can be dropped, otherwise false",
+        "container": "true if the object is a container, false otherwise",
+        "listed": "true if the object is listable, false otherwise",
+        "timeout": "the object will be present and takeable if the number is greater thatn 0. The time is given as seconds",
+        "mouse": "true if the object can be interactive with mouse click"
+    },
+    "can-use-with": ["list of UUIDs of the objects which can interact with this object"],
+    "transform-to": {
+        "transformed": "UUID of the object which result after use the current one",
+        "destroy-original": "true if the transformation destroys the original object, false otherwise"
+    },
+    "triggers": {
+        "comment": "triggers that can be fired on different actions with the object",
+        "list": [
+            {
+                "comment": "action is the action that fires the trigger",
+                "action": ["List the actions"],
+                "effect": {
+                    "comment": "We need to see how to define the action that must be run with the trigger.",
+                    "action": "name / uuid of the action that must be run",
+                    "payload": {
+                        "comment": "variable list of pairs key-value which contains more information to the effect",
+                        "source": "file that contains the sound to play in the scene",
+                        "repeat": "true if the sound repeats indefinitely"
+                    }
+                }
+            },
+            {
+                "action": "affected action",
+                "trigger": {
+                    "action": "action to fires",
+                    "payload": "payload of action"
+                }
+            }
+        ]
+    }
+}

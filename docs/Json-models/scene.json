@@ -1,0 +1,121 @@
+{
+    "DAAD": {
+        "comment": "DAAD section to keep backguard compatibility",
+        "locno": "valid location number",
+    },
+    "uuid": "Scene identifier",
+    "name": "name of the scene",
+    "description": {
+        "normal": "description of the scene when the user came in",
+        "odor": "Odor description, it is optional",
+        "sound": "Sound description if there are any sound in the scene. It is optional"
+    },
+    "visited": "True if the scene has been visited, false otherwise",
+    "image": {
+        "file": "path or base64 of image to represent the scene",
+        "video": "true if the file is a video instead an image",
+        "repeat": "true if the video is repeated indefinitely",
+        "synchro": "true if the video must be synchronized with the sound, false otherwise"
+    },
+    "light-level": "value from 0 to 255 indicating how lightened is in the room where 0 is dark and 255 is full lit",
+    "objects": [
+        {
+            "comment": "Object definition that this scene has availabla",
+            "objuuid": "object identifier"
+        }
+    ],
+    "sound": {
+        "source": "file that contains the sound to play in the scene",
+        "repeat": "true if the sound repeats indefinitely"
+    },
+    "connections": {
+        "comment": "Available connections for the current scene. If the connection does not exist it must be null. Otherwise it must hold the other scene UUID.",
+        "north": {
+            "state": "value of enum of states of connections",
+            "trigger": {
+                "comments": "Triggers that should be triggered when the character get into the scene",
+                "trigger": {},
+            },
+            "required": {
+                "comment": "what objects/actions which the users needs to be done or carry to access to the scene.",
+                "objects": [],
+                "actions": []
+            }
+        },
+        "south": {
+            "state": "value of enum of states of connections",
+            "trigger": {
+                "comments": "Triggers that should be triggered when the character get into the scene",
+                "trigger": {
+                    "when": "When the trigger should be triggered. onEnter, onExit",
+                    "action": "Action that must be run."
+                }
+            },
+            "required": {
+                "comment": "what objects/actions which the users needs to be done or carry to access to the scene.",
+                "objects": [],
+                "actions": []
+            }
+        },
+        "east": {
+            "state": "value of enum of states of connections",
+            "trigger": {
+                "comments": "Triggers that should be triggered when the character get into the scene",
+                "trigger": {
+                    "when": "When the trigger should be triggered. onEnter, onExit",
+                    "action": "Action that must be run."
+                }
+            },
+            "required": {
+                "comment": "what objects/actions which the users needs to be done or carry to access to the scene.",
+                "objects": [],
+                "actions": []
+            }
+        },
+        "west": {
+            "state": "value of enum of states of connections",
+            "trigger": {
+                "comments": "Triggers that should be triggered when the character get into the scene",
+                "trigger": {
+                    "when": "When the trigger should be triggered. onEnter, onExit",
+                    "action": "Action that must be run."
+                }
+            },
+            "required": {
+                "comment": "what objects/actions which the users needs to be done or carry to access to the scene.",
+                "objects": [],
+                "actions": []
+            }
+        },
+        "up": {
+            "state": "value of enum of states of connections",
+            "trigger": {
+                "comments": "Triggers that should be triggered when the character get into the scene",
+                "trigger": {
+                    "when": "When the trigger should be triggered. onEnter, onExit",
+                    "action": "Action that must be run."
+                }
+            },
+            "required": {
+                "comment": "what objects/actions which the users needs to be done or carry to access to the scene.",
+                "objects": [],
+                "actions": []
+            }
+        },
+        "down": {
+            "state": "value of enum of states of connections",
+            "trigger": {
+                "comments": "Triggers that should be triggered when the character get into the scene",
+                "trigger": {
+                    "when": "When the trigger should be triggered. onEnter, onExit",
+                    "action": "Action that must be run."
+                }
+            },
+            "required": {
+                "comment": "what objects/actions which the users needs to be done or carry to access to the scene.",
+                "objects": [],
+                "actions": []
+            }
+        }
+    }
+}

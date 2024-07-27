@@ -1,0 +1,10 @@
+{
+    "DAAD": {
+        "comment": "DAAD section to keep backguard compatibility"
+    },
+    "uuid": "character identifier",
+    "name": "name of the character",
+    "image": "path or base64 of image to represent the character",
+    "max-load": "Max load that the user can carry",
+    "location": "character location in the whole game map"
+}
