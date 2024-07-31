@@ -30,24 +30,9 @@ use App\constants\Constants;
 use App\exceptions\CalculusImpossibleException;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Ramsey\Uuid\UuidInterface;
 
-class Entity
+class Entity extends asdbase
 {
-    /**
-     * UUID for the entity. It must be unique along the whole project
-     *
-     * @var UuidInterface
-     */
-    protected UuidInterface $uuid;
-
-    /**
-     * Entity name
-     *
-     * @var string
-     */
-    protected string $name;
-
     /**
      * Entity's description
      *
@@ -126,82 +111,6 @@ class Entity
         $this->depth = 0.0;
         $this->position = new Position(0.0, 0.0, 0.0);
         $this->attributes = [];
-    }
-
-    /**
-     * Return the UUID of the entity
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return string
-     *
-     */
-    public function getUuid(): UuidInterface
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * Set the new UUID of an entity. If the $uuid member has value, then you must Only
-     * can do this action force the value reassignment. Bear in mind that this process
-     * will affect to all the highest order related entities, so we need to dispatch an
-     * event to reassign the new value.
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @param  UuidInterface  $uuid
-     * @param  bool  $force
-     *
-     * @return $this
-     *
-     * TODO: implement the event to notify to every object that the entity UUID has been changed
-     */
-    public function setUuid(UuidInterface $uuid, bool $force = false): Entity
-    {
-        if ($force) {
-            $this->uuid = $uuid;
-            // EntityUUIDChangedEvent::dispatch($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get the entity's name.
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return string
-     *
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set the entity's name
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @param  string  $name
-     *
-     * @return $this
-     *
-     */
-    public function setName(string $name): Entity
-    {
-        if (empty($name)) {
-            throw new InvalidArgumentException('Name must not be empty');
-        }
-
-        $this->name = $name;
-
-        return $this;
     }
 
     /**
