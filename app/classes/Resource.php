@@ -71,10 +71,10 @@ class Resource extends asdbase
     /**
      * Resource constructor.
      *
-     * @param  string  $type
      * @param  string  $filename
      *
      * @throws FileNotFoundException
+     * @throws FileCannotBeAccessibleException
      */
     public function __construct(string $filename)
     {
@@ -85,10 +85,6 @@ class Resource extends asdbase
         if (!is_readable($filename)) {
             throw new FileCannotBeAccessibleException('The file is not accessible');
         }
-
-//        if (!file_exists($filename) || !is_readable($filename)) {
-//            throw new FileNotFoundException('The file does not exists or is not accessible');
-//        }
 
         $this->filename = $filename;
         $this->type = $this->getFileMimeType();
