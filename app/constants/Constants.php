@@ -8,6 +8,9 @@ class Constants
     public const string SMELL_DESCRIPTION = 'smell';
     public const string SOUND_DESCRIPTION = 'sound';
 
+    public const int MINIMUM_WIDTH_SIZE = 1;
+    public const int MINIMUM_HEIGHT_SIZE = 1;
+
     public const bool BINARY_FILE = true;
 
     // @see https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************
  * Project Name:    Adventure Studio Designer
- * Filename:        Resource.php
+ * Filename:        Image.php
  * Description:      See the project README.md
  *
  * Founders:
@@ -31,28 +31,28 @@ use App\exceptions\InvalidMimeTypeException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use InvalidArgumentException;
 
-class Resource extends asdbase
+class Image extends Resource
 {
     /**
-     * Hash of the resource content
+     * Resource width in pixels
      *
-     * @var string
+     * @var int
      */
-    protected string $hash;
+    protected int $width;
 
     /**
-     * Mime type of the resource
+     * Resource height in pixels
      *
-     * @var string
+     * @var int
      */
-    protected string $type;
+    protected int $height;
 
     /**
-     * Resource file path
+     * Image file types
      *
-     * @var string
+     * @var array
      */
-    protected string $filename;
+    private array $imageMimetypes;
 
     /**
      * Resource constructor.
@@ -64,83 +64,82 @@ class Resource extends asdbase
      */
     public function __construct(string $filename)
     {
-        if (!file_exists($filename)) {
-            throw new FileNotFoundException('The file does not exists');
-        }
+        $this->imageMimetypes = array_filter(array_map(
+            function($item) {
+                if (str_contains($item, 'image')) {
+                    return $item;
+                }
+            },
+            array_keys(Constants::MIME_TYPES)
+        ));
 
-        if (!is_readable($filename)) {
-            throw new FileCannotBeAccessibleException('The file is not accessible');
-        }
-
-        $this->filename = $filename;
-        $this->type = $this->getFileMimeType();
-        if ($this->filename) {
-            $this->createHash();
-        }
+        parent::__construct($filename);
+        $this->width = 1;
+        $this->height = 1;
     }
 
     /**
-     * Return the file hash
+     * Return the width of the resource (in pixels)
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
      * @version Jul.2024
      *
-     * @return string
+     * @return int
      *
      */
-    public function getHash(): string
+    public function getWidth(): int
     {
-        return $this->hash;
+        return $this->width;
     }
 
     /**
-     * Calculate the hash of the filename in the class
+     * Set the width of the resource (in pixels)
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
      * @version Jul.2024
+     *
+     * @param  int  $width
      *
      * @return $this
      *
      */
-    public function createHash(): Resource
+    public function setWidth(int $width): Resource
     {
-        if (!empty($this->filename) && !is_dir($this->filename)) {
-            $this->hash = hash_file('sha256', $this->filename, Constants::BINARY_FILE);
-        }
+        $this->width = $width;
 
         return $this;
     }
 
     /**
-     * Return the mimetype of the resource
+     * Return the height of the resource (in pixels)
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
      * @version Jul.2024
      *
-     * @return string
+     * @return int
      *
      */
-    public function getType(): string
+    public function getHeight(): int
     {
-        return $this->type;
+        return $this->height;
     }
 
     /**
-     * Set the mimetype of the internal filename
+     * Set the resource height of the resource (in pixels))
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
      * @version Jul.2024
      *
-     * @return string
+     * @param  int  $height
+     *
+     * @return $this
      *
      */
-    public function getFileMimeType(): string
+    public function setHeight(int $height): Resource
     {
-        if ($this->filename) {
-            $this->type = mime_content_type($this->filename);
-        }
+        $this->height = $height;
 
-        return $this->type;
+        return $this;
     }
 
     /**
@@ -158,7 +157,7 @@ class Resource extends asdbase
      */
     public function setType(string $type): Resource
     {
-        if (!in_array($type, array_keys(Constants::MIME_TYPES))) {
+        if (!in_array($type, $this->imageMimetypes)) {
             throw new InvalidArgumentException('The given mimetype must be valid and allowed. See allowedMimetypes()');
         }
 
@@ -180,40 +179,7 @@ class Resource extends asdbase
      */
     public function getAllowedMimetypes(): string
     {
-        return json_encode(
-            Constants::MIME_TYPES,
-            JSON_UNESCAPED_SLASHES);
+        return json_encode($this->imageMimetypes, JSON_UNESCAPED_SLASHES);
     }
 
-    /**
-     * Return the resource extensions based on the resource mimetype
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return array
-     *
-     */
-    public function getTypeExtensions(): array
-    {
-        if (empty ($this->type)) {
-            throw new InvalidArgumentException('The resource type cannot be empty.');
-        }
-
-        return Constants::MIME_TYPES[$this->type];
-    }
-
-    /**
-     * Return the resource filename in the local filesystem
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return string
-     *
-     */
-    public function getFilename(): string
-    {
-        return $this->filename;
-    }
 }
