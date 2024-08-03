@@ -1,80 +1,97 @@
 version: '3'
 services:
-  asd_httpd:
-    image: nginx:alpine
-    container_name: ${HTTPD_CONTAINER}
-    env_file:
-      - ".env"
-    ports:
-      - ${HTTPD_PORT}:80
-    environment:
-      - PROJECT_NAME=${PROJECT_NAME}
-      - HTTPD_HOST=${HTTPD_HOST}
-      - XDEBUG_MODE=${PHP_XDEBUG_MODE}
-    command:
-      - /bin/sh
-      - -c
-      - |
-        envsubst '$$HTTPD_HOST $$PROJECT_NAME' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf
-        nginx -g 'daemon off;'
-        find ./storage -exec chown www-data:www-data {} \;
-        find ./storage -type f -exec chmod 777 {} \;
-        find ./storage -type d -exec chmod 777 {} \;
-        find ./bootstrap/cache -exec chown www-data:www-data {} \;
-        find ./bootstrap/cache -type f -exec chmod 777 {} \;
-        find ./bootstrap/cache -type d -exec chmod 777 {} \;
-        composer install
-        composer dump-autoload
-    networks:
-      - ${NETWORK}
-    volumes:
-      - ${HTTPD_CONFIG_DIRECTORY}/default.conf:/etc/nginx/conf.d/default.conf
-      - ${HTTPD_CONFIG_DIRECTORY}/default.template.conf:/etc/nginx/conf.d/default.template
-      - ${HTTPD_CONFIG_DIRECTORY}/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
-      - ${CODE_DIRECTORY}:/var/www/${PROJECT_NAME}
-      - ${HTTPD_LOG_DIRECTORY}:/var/log/nginx
-    depends_on:
-      - asd_php
+    asd_httpd:
+        image: nginx:alpine
+        container_name: ${HTTPD_CONTAINER}
+        env_file:
+            - ".env"
+        ports:
+            - ${HTTPD_PORT}:80
+        environment:
+            - PROJECT_NAME=${PROJECT_NAME}
+            - HTTPD_HOST=${HTTPD_HOST}
+            - XDEBUG_MODE=${PHP_XDEBUG_MODE}
+        command:
+            - /bin/sh
+            - -c
+            - |
+                envsubst '$$HTTPD_HOST $$PROJECT_NAME' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf
+                nginx -g 'daemon off;'
+                find ./storage -exec chown www-data:www-data {} \;
+                find ./storage -type f -exec chmod 777 {} \;
+                find ./storage -type d -exec chmod 777 {} \;
+                find ./bootstrap/cache -exec chown www-data:www-data {} \;
+                find ./bootstrap/cache -type f -exec chmod 777 {} \;
+                find ./bootstrap/cache -type d -exec chmod 777 {} \;
+#                composer install
+#                composer dump-autoload
+        networks:
+            - ${NETWORK}
+        volumes:
+            - ${HTTPD_CONFIG_DIRECTORY}/default.conf:/etc/nginx/conf.d/default.conf
+            - ${HTTPD_CONFIG_DIRECTORY}/default.template.conf:/etc/nginx/conf.d/default.template
+            - ${HTTPD_CONFIG_DIRECTORY}/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
+            - ${CODE_DIRECTORY}:/var/www/${PROJECT_NAME}
+            - ${HTTPD_LOG_DIRECTORY}:/var/log/nginx
+        depends_on:
+            - asd_php
 
-  asd_php:
-    container_name: ${PHP_CONTAINER}
-    env_file:
-      - ".env"
-    build:
-      dockerfile: ${PHP_DIRECTORY}/Dockerfile
-      context: .
-      args:
-        USER_ID: ${USER_ID:-1000}
-        GROUP_ID: ${GROUP_ID:-1000}
-    environment:
-      - XDEBUG_CONFIG:client_host=172.17.0.1 client_port=9003
-    networks:
-      - ${NETWORK}
-    volumes:
-      - ${PHP_CONFIG_DIRECTORY}/php.ini:/usr/local/etc/php/conf.d/php.ini
-      - ${CODE_DIRECTORY}:/var/www/${PROJECT_NAME}
+    asd_php:
+        container_name: ${PHP_CONTAINER}
+        env_file:
+            - ".env"
+        build:
+            dockerfile: ${PHP_DIRECTORY}/Dockerfile
+            context: .
+            args:
+                USER_ID: ${USER_ID:-1000}
+                GROUP_ID: ${GROUP_ID:-1000}
+        environment:
+            - XDEBUG_CONFIG:client_host=172.17.0.1 client_port=9003
+        networks:
+            - ${NETWORK}
+        volumes:
+            - ${PHP_CONFIG_DIRECTORY}/php.ini:/usr/local/etc/php/conf.d/php.ini
+            - ${CODE_DIRECTORY}:/var/www/${PROJECT_NAME}
 
-  asd_memcached:
-    image: memcached
-    container_name: ${MEMCACHED_CONTAINER}
-#    restart: ${MEMCACHED_RESTART}
-    env_file:
-      - ".env"
-    expose:
-      - 11211
-    networks:
-      - ${NETWORK}
+    asd_js:
+        container_name: ${JS_CONTAINER}
+        env_file:
+            - ".env"
+        build:
+            dockerfile: ${JS_CONFIG_DIRECTORY}/Dockerfile
+            context: .
+            args:
+                USER_ID: ${USER_ID:-1000}
+                GROUP_ID: ${GROUP_ID:-1000}
+        ports:
+            - ${JS_PORT}:3000
+        networks:
+            - ${NETWORK}
+        volumes:
+            - ${JS_CODE_DIRECTORY}:/app
 
-  asd_composer:
-    image: composer:lts
-    container_name: ${COMPOSER_CONTAINER}
-    volumes:
-      - ${CODE_DIRECTORY}:/app
-    command: install
+    asd_memcached:
+        image: memcached
+        container_name: ${MEMCACHED_CONTAINER}
+        #    restart: ${MEMCACHED_RESTART}
+        env_file:
+            - ".env"
+        expose:
+            - 11211
+        networks:
+            - ${NETWORK}
+
+    asd_composer:
+        image: composer:lts
+        container_name: ${COMPOSER_CONTAINER}
+        volumes:
+            - ${CODE_DIRECTORY}:/app
+        command: install
 
 volumes:
-  cache:
-    driver: local
+    cache:
+        driver: local
 
 networks:
-  asd_network:
+    asd_network:
