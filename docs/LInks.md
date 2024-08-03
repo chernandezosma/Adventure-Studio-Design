@@ -24,3 +24,7 @@
 + jDAAD (new Javascript/HTML interpreter): https://github.com/Utodev/JDAAD
 + img2DAAD (tool to generate image databases for Amiga and ST DAAD games) https://github.com/Utodev/img2daad
 + GCS (font editor for DAAD, base in SINTAC one): https://github.com/Utodev/GCS
+
+## Libraries
+React-Isometric-projection: https://github.com/kylejlin/react-isometric-projection
+Isometric Assets library: https://kenney-assets.itch.io/
