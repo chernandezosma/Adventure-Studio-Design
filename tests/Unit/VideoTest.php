@@ -28,6 +28,7 @@ namespace Tests\Unit;
 
 use App\classes\Resource;
 use App\classes\Sound;
+use App\classes\Video;
 use App\constants\Constants;
 use App\exceptions\FileCannotBeAccessibleException;
 use App\exceptions\InvalidMimeTypeException;
@@ -40,14 +41,16 @@ use Tests\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
 
-class SoundTest extends TestCase
+class VideoTest extends TestCase
 {
-    private const string TESTING_SOUND_NAME = 'sound-name';
-    private const string TESTING_FILENAME = 'testing_sound.mp3';
+    private const string TESTING_VIDEO_NAME = 'video-name';
+    private const string TESTING_FILENAME = 'testing_video.m4v';
     private const string TESTING_PATH = 'testing';
     private const string TESTING_FULL_FILE_PATH = self::TESTING_PATH.DIRECTORY_SEPARATOR.self::TESTING_FILENAME;
 
     private const int TESTING_FILE_LENGTH = 10;
+    private const int TESTING_FILE_WIDTH_SIZE = 400;
+    private const int TESTING_FILE_HEIGHT_SIZE = 400;
 
     private string $fullFilenamePath;
 
@@ -83,16 +86,21 @@ class SoundTest extends TestCase
      */
     public function test_constructor_with_correct_params()
     {
-        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        $resource = new Video(self::TESTING_VIDEO_NAME, $this->fullFilenamePath);
 
         $this->assertNotNull($resource);
-        $this->assertInstanceOf(Sound::class, $resource);
+        $this->assertInstanceOf(Video::class, $resource);
         $this->assertEquals($this->fullFilenamePath, $resource->getFilename());
         $this->assertNotEmpty($resource->getHash());
         $this->assertEquals(Constants::MINIMUM_LENGTH_SIZE, $resource->getLength());
 
         $resource->setLength(self::TESTING_FILE_LENGTH);
         $this->assertEquals(self::TESTING_FILE_LENGTH, $resource->getLength());
+
+        $resource->setWidth(self::TESTING_FILE_WIDTH_SIZE);
+        $this->assertEquals(self::TESTING_FILE_WIDTH_SIZE, $resource->getWidth());
+        $resource->setHeight(self::TESTING_FILE_HEIGHT_SIZE);
+        $this->assertEquals(self::TESTING_FILE_HEIGHT_SIZE, $resource->getHeight());
     }
 
     /**
@@ -116,7 +124,7 @@ class SoundTest extends TestCase
             $faker->name()
         );
         $this->expectException(FileNotFoundException::class);
-        new Sound(self::TESTING_SOUND_NAME, $fullFilename);
+        new Video(self::TESTING_VIDEO_NAME, $fullFilename);
     }
 
     /**
@@ -135,7 +143,7 @@ class SoundTest extends TestCase
         $this->assertFileExists($this->fullFilenamePath);
         $this->assertTrue(chmod($this->fullFilenamePath, 600));
         $this->expectException(FileCannotBeAccessibleException::class);
-        new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        new Video(self::TESTING_VIDEO_NAME, $this->fullFilenamePath);
     }
 
     /**
@@ -153,7 +161,7 @@ class SoundTest extends TestCase
         Storage::assertExists(self::TESTING_FILENAME);
         $this->assertFileExists($this->fullFilenamePath);
 
-        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        $resource = new Video(self::TESTING_VIDEO_NAME, $this->fullFilenamePath);
         $hash = hash_file('sha256', $this->fullFilenamePath, Constants::BINARY_FILE);
         $this->assertEquals($resource->createHash()->getHash(), $hash);
     }
@@ -173,12 +181,12 @@ class SoundTest extends TestCase
         Storage::assertExists(self::TESTING_FILENAME);
         $this->assertFileExists($this->fullFilenamePath);
 
-        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
-        $this->assertEquals('audio/mpeg', $resource->getType());
+        $resource = new Video(self::TESTING_VIDEO_NAME, $this->fullFilenamePath);
+        $this->assertEquals('video/mp4', $resource->getType());
     }
 
     /**
-     * Test an exception when you try to set a non matching mimetype with the file
+     * Test an exception when you try to set a not matching mimetype with the file
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
      * @version Jul.2024
@@ -194,7 +202,7 @@ class SoundTest extends TestCase
         Storage::assertExists(self::TESTING_FILENAME);
         $this->assertFileExists($this->fullFilenamePath);
 
-        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        $resource = new Video(self::TESTING_VIDEO_NAME, $this->fullFilenamePath);
         $this->expectException(InvalidMimeTypeException::class);
         $resource->setType('image/gif');
     }
@@ -215,9 +223,9 @@ class SoundTest extends TestCase
     {
         Storage::assertExists(self::TESTING_FILENAME);
         $this->assertFileExists($this->fullFilenamePath);
-        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
-        $resource->setType('audio/mpeg');
-        assertEquals('audio/mpeg', $resource->getType());
+        $resource = new Video(self::TESTING_VIDEO_NAME, $this->fullFilenamePath);
+        $resource->setType('video/mp4');
+        assertEquals('video/mp4', $resource->getType());
     }
 
     /**
@@ -236,7 +244,7 @@ class SoundTest extends TestCase
         Storage::assertExists(self::TESTING_FILENAME);
         $this->assertFileExists($this->fullFilenamePath);
 
-        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        $resource = new Video(self::TESTING_VIDEO_NAME, $this->fullFilenamePath);
         $this->assertEquals('string', gettype($resource->getAllowedMimetypes()));
         $this->assertJson($resource->getAllowedMimetypes());
     }
@@ -256,10 +264,10 @@ class SoundTest extends TestCase
     {
         Storage::assertExists(self::TESTING_FILENAME);
         $this->assertFileExists($this->fullFilenamePath);
-        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        $resource = new Video(self::TESTING_VIDEO_NAME, $this->fullFilenamePath);
 
         $this->assertEquals('array', gettype($resource->getTypeExtensions()));
-        $this->assertContains('mp3', array_values($resource->getTypeExtensions()));
+        $this->assertContains('mp4', array_values($resource->getTypeExtensions()));
     }
 
     /**
@@ -277,7 +285,7 @@ class SoundTest extends TestCase
     {
         Storage::assertExists(self::TESTING_FILENAME);
         $this->assertFileExists($this->fullFilenamePath);
-        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        $resource = new Video(self::TESTING_VIDEO_NAME, $this->fullFilenamePath);
 
         // Use reflection to force an impossible situation, but need to cover
         // the exception
