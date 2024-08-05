@@ -2,7 +2,7 @@
 /********************************************************************************
  * Project Name:    Adventure Studio Designer
  * Filename:        asdbase.php
- * Description:      See the project README.md
+ * Description:     See the project README.md
  *
  * Founders:
  *      Cayetano H. Osma    <moesis@gmail.com>
@@ -25,10 +25,11 @@
  ********************************************************************************/
 namespace App\classes;
 
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Ramsey\Uuid\UuidInterface;
 
-class asdbase
+class ASDbase
 {
     /**
      * UUID for the entity. It must be unique along the whole project
@@ -45,6 +46,19 @@ class asdbase
     protected string $name;
 
     /**
+     * @param  string  $name
+     */
+    public function __construct(string $name)
+    {
+        if (empty($name)) {
+            throw new InvalidArgumentException('Name parameter is required');
+        }
+
+        $this->uuid = Str::uuid();
+        $this->name = $name;
+    }
+
+    /**
      * Return the UUID of the entity
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
@@ -56,32 +70,6 @@ class asdbase
     public function getUuid(): UuidInterface
     {
         return $this->uuid;
-    }
-
-    /**
-     * Set the new UUID of an entity. If the $uuid member has value, then you must Only
-     * can do this action force the value reassignment. Bear in mind that this process
-     * will affect to all the highest order related entities, so we need to dispatch an
-     * event to reassign the new value.
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @param  UuidInterface  $uuid
-     * @param  bool  $force
-     *
-     * @return $this
-     *
-     * TODO: implement the event to notify to every object that the entity UUID has been changed
-     */
-    public function setUuid(UuidInterface $uuid, bool $force = false): Entity
-    {
-        if ($force) {
-            $this->uuid = $uuid;
-            // EntityUUIDChangedEvent::dispatch($this);
-        }
-
-        return $this;
     }
 
     /**
@@ -112,7 +100,7 @@ class asdbase
     public function setName(string $name): Entity
     {
         if (empty($name)) {
-            throw new InvalidArgumentException('Name must not be empty');
+            throw new InvalidArgumentException('name is required');
         }
 
         $this->name = $name;

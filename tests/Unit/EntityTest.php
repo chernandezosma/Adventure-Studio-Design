@@ -8,6 +8,7 @@ use App\classes\Position;
 use App\constants\Constants;
 use App\enums\EntityAttributes;
 use App\exceptions\CalculusImpossibleException;
+use ErrorException;
 use Faker\Factory;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -106,65 +107,6 @@ class EntityTest extends TestCase
     }
 
     /**
-     * Test that the UUID has value and it has not changed
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return void
-     *
-     */
-    public function test_set_uuid()
-    {
-        $uuid = Str::uuid();
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-
-        $this->assertEquals($this::ENTITY_DESCRIPTION, $entity->getDescription()->getNormalDescription());
-        $this->assertEquals($this::ENTITY_NAME, $entity->getName());
-
-        $entity->setUuid($uuid);
-        $this->assertNotEquals($uuid->toString(), $entity->getUuid());
-        $this->assertEquals(0.0, $entity->getWidth());
-        $this->assertEquals(0.0, $entity->getHeight());
-        $this->assertEquals(0.0, $entity->getDepth());
-        $this->assertEquals(0.0, $entity->getWeight());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionX());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionY());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionZ());
-        $this->assertEquals([], $entity->getAttributes());
-    }
-
-    /**
-     * Test the name change
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return void
-     *
-     * TODO: We need to test that the event has been dispatched.
-     */
-    public function test_set_uuid_with_previous_value_and_no_force()
-    {
-        $uuid = Str::uuid();
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-
-        $this->assertEquals($this::ENTITY_DESCRIPTION, $entity->getDescription()->getNormalDescription());
-        $this->assertEquals($this::ENTITY_NAME, $entity->getName());
-
-        $entity->setUuid($uuid, true);
-        $this->assertEquals($uuid, $entity->getUuid());
-        $this->assertEquals(0.0, $entity->getWidth());
-        $this->assertEquals(0.0, $entity->getHeight());
-        $this->assertEquals(0.0, $entity->getDepth());
-        $this->assertEquals(0.0, $entity->getWeight());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionX());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionY());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionZ());
-        $this->assertEquals([], $entity->getAttributes());
-    }
-
-    /**
      * Test the name change with empty name. InvalidArgumentException is thrown
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
@@ -244,7 +186,7 @@ class EntityTest extends TestCase
         $entity->setDepth(0);
         $this->assertEquals(0, $entity->getDepth());
 
-        $postition = new Position(0,0,0);
+        $postition = new Position(0, 0, 0);
         $entity->setPosition($postition);
         $this->assertEquals(0, $entity->getPosition()->getPositionX());
         $this->assertEquals(0, $entity->getPosition()->getPositionY());

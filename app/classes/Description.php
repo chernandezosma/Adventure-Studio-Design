@@ -2,7 +2,7 @@
 /********************************************************************************
  * Project Name:    Adventure Studio Designer
  * Filename:        Description.php
- * Description:      See the project README.md
+ * Description:     See the project README.md
  *
  * Founders:
  *      Cayetano H. Osma    <moesis@gmail.com>

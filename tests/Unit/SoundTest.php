@@ -1,8 +1,8 @@
 <?php
 /********************************************************************************
  * Project Name:    Adventure Studio Designer
- * Filename:        ResourceTest.php
- * Description:      See the project README.md
+ * Filename:        SoundTest.php
+ * Description:     See the project README.md
  *
  * Founders:
  *      Cayetano H. Osma    <moesis@gmail.com>
@@ -27,60 +27,48 @@
 namespace Tests\Unit;
 
 use App\classes\Resource;
+use App\classes\Sound;
 use App\constants\Constants;
 use App\exceptions\FileCannotBeAccessibleException;
 use App\exceptions\InvalidMimeTypeException;
 use Faker\Factory as Faker;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 use ReflectionClass;
 use Tests\TestCase;
 
-class ResourceTest extends TestCase
-{
-    private const string TESTING_RESOURCE_NAME = 'testing-image';
-    private const string FILE_PATH = 'storage/framework/testing/disks/local/testing/testing_image.png';
-    private const string PATH = 'storage/framework/testing/disks/local/testing';
+use function PHPUnit\Framework\assertEquals;
 
-    /**
-     * Preparing the environment for tests
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return void
-     *
-     */
+class SoundTest extends TestCase
+{
+    private const string TESTING_SOUND_NAME = 'sound-name';
+    private const string TESTING_FILENAME = 'testing_sound.mp3';
+    private const string TESTING_PATH = 'testing';
+    private const string TESTING_FULL_FILE_PATH = self::TESTING_PATH.DIRECTORY_SEPARATOR.self::TESTING_FILENAME;
+
+    private const int TESTING_FILE_LENGTH = 10;
+
+    private string $fullFilenamePath;
+
     protected function setUp(): void
     {
         parent::setUp();
-        Storage::fake('local');
-        $filename = UploadedFile::fake()
-            ->image('testing-image.png', 400, 400)
-            ->storeAs('testing', 'testing_image.png');
+        $fileContent = Storage::disk('local')->get('testing/'.self::TESTING_FILENAME);
+
         $oldMask = umask(0);
-        chmod(self::PATH, 0775);
-        chmod(self::FILE_PATH, 0775);
+        $path = Storage::fake('local')->path('');
+        chmod($path, 0775);
+
+        $result = Storage::fake('local')->put(
+            self::TESTING_FILENAME,
+            $fileContent
+        );
+
+        chmod($path . 'testing_sound.mp3', 0775);
         umask($oldMask);
-    }
 
-    /**
-     * Custom teardown to delete the file.
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return void
-     *
-     */
-    protected function tearDown(): void
-    {
-        unlink(self::FILE_PATH);
-        rmdir(self::PATH);
-
-        parent::tearDown();
+        $this->fullFilenamePath = Storage::path(self::TESTING_FILENAME);
     }
 
     /**
@@ -90,16 +78,23 @@ class ResourceTest extends TestCase
      * @version Jul.2024
      *
      * @return void
-     *
+     * @throws FileCannotBeAccessibleException
      * @throws FileNotFoundException
      */
     public function test_constructor_with_correct_params()
     {
-        $resource = new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
+        // $filepath = Storage::disk('local')->path(self::TESTING_FULL_FILE_PATH);
+
+        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+
         $this->assertNotNull($resource);
         $this->assertInstanceOf(Resource::class, $resource);
-        $this->assertEquals(self::FILE_PATH, $resource->getFilename());
+        $this->assertEquals($this->fullFilenamePath, $resource->getFilename());
         $this->assertNotEmpty($resource->getHash());
+        $this->assertEquals(Constants::MINIMUM_LENGTH_SIZE, $resource->getLength());
+
+        $resource->setLength(self::TESTING_FILE_LENGTH);
+        $this->assertEquals(self::TESTING_FILE_LENGTH, $resource->getLength());
     }
 
     /**
@@ -110,6 +105,7 @@ class ResourceTest extends TestCase
      *
      * @return void
      *
+     * @throws FileNotFoundException
      * @throws FileCannotBeAccessibleException
      */
     public function test_constructor_with_non_existing_file()
@@ -117,11 +113,12 @@ class ResourceTest extends TestCase
         $faker = Faker::create();
         $fullFilename = sprintf(
             '%s%s%s',
-            storage_path(self::FILE_PATH),
+            storage_path(self::TESTING_FULL_FILE_PATH),
             DIRECTORY_SEPARATOR,
-            $faker->name());
+            $faker->name()
+        );
         $this->expectException(FileNotFoundException::class);
-        new Resource(self::TESTING_RESOURCE_NAME, $fullFilename);
+        new Sound(self::TESTING_SOUND_NAME, $fullFilename);
     }
 
     /**
@@ -131,13 +128,16 @@ class ResourceTest extends TestCase
      * @version Jul.2024
      *
      * @return void
+     *
+     * @throws FileNotFoundException
      */
     public function test_constructor_with_non_accessible_file()
     {
-        $this->assertTrue(file_exists(self::FILE_PATH));
-        $this->assertTrue(chmod(self::FILE_PATH, 600));
+        Storage::assertExists(self::TESTING_FILENAME);
+        $this->assertFileExists($this->fullFilenamePath);
+        $this->assertTrue(chmod($this->fullFilenamePath, 600));
         $this->expectException(FileCannotBeAccessibleException::class);
-        new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
+        new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
     }
 
     /**
@@ -147,12 +147,16 @@ class ResourceTest extends TestCase
      * @version Jul.2024
      *
      * @return void
+     * @throws FileCannotBeAccessibleException
+     * @throws FileNotFoundException
      */
     public function test_set_hash_to_an_existing_file()
     {
-        $this->assertTrue(file_exists(self::FILE_PATH));
-        $resource = new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
-        $hash = hash_file('sha256', self::FILE_PATH, Constants::BINARY_FILE);
+        Storage::assertExists(self::TESTING_FILENAME);
+        $this->assertFileExists($this->fullFilenamePath);
+
+        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        $hash = hash_file('sha256', $this->fullFilenamePath, Constants::BINARY_FILE);
         $this->assertEquals($resource->createHash()->getHash(), $hash);
     }
 
@@ -163,12 +167,16 @@ class ResourceTest extends TestCase
      * @version Jul.2024
      *
      * @return void
+     * @throws FileCannotBeAccessibleException
+     * @throws FileNotFoundException
      */
     public function test_mimetype_of_filename()
     {
-        $this->assertTrue(file_exists(self::FILE_PATH));
-        $resource = new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
-        $this->assertEquals($resource->getType(), 'image/png');
+        Storage::assertExists(self::TESTING_FILENAME);
+        $this->assertFileExists($this->fullFilenamePath);
+
+        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        $this->assertEquals('audio/mpeg', $resource->getType());
     }
 
     /**
@@ -179,12 +187,16 @@ class ResourceTest extends TestCase
      *
      * @return void
      *
+     * @throws FileCannotBeAccessibleException
+     * @throws FileNotFoundException
      * @throws InvalidMimeTypeException
      */
     public function test_exception_change_unmatch_mimetype()
     {
-        $this->assertTrue(file_exists(self::FILE_PATH));
-        $resource = new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
+        Storage::assertExists(self::TESTING_FILENAME);
+        $this->assertFileExists($this->fullFilenamePath);
+
+        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
         $this->expectException(InvalidMimeTypeException::class);
         $resource->setType('image/gif');
     }
@@ -197,32 +209,17 @@ class ResourceTest extends TestCase
      *
      * @return void
      *
+     * @throws FileCannotBeAccessibleException
+     * @throws FileNotFoundException
      * @throws InvalidMimeTypeException
      */
-    public function test_exception_change_wrong_mimetype()
+    public function test_exception_change_mimetype()
     {
-        $this->assertTrue(file_exists(self::FILE_PATH));
-        $resource = new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
-        $this->expectException(InvalidArgumentException::class);
-        $resource->setType('image/xxx');
-    }
-
-    /**
-     * Test when you change the mimetype to the appropriate one.
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return void
-     *
-     * @throws InvalidMimeTypeException
-     */
-    public function test_exception_change_the_mimetype()
-    {
-        $this->assertTrue(file_exists(self::FILE_PATH));
-        $resource = new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
-        $resource->setType('image/png');
-        $this->assertEquals($resource->getType(), 'image/png');
+        Storage::assertExists(self::TESTING_FILENAME);
+        $this->assertFileExists($this->fullFilenamePath);
+        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
+        $resource->setType('audio/mpeg');
+        assertEquals('audio/mpeg', $resource->getType());
     }
 
     /**
@@ -233,12 +230,15 @@ class ResourceTest extends TestCase
      *
      * @return void
      *
+     * @throws FileCannotBeAccessibleException
+     * @throws FileNotFoundException
      */
     public function test_get_allowed_mimetypes_array()
     {
-        $this->assertTrue(file_exists(self::FILE_PATH));
-        $resource = new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
+        Storage::assertExists(self::TESTING_FILENAME);
+        $this->assertFileExists($this->fullFilenamePath);
 
+        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
         $this->assertEquals('string', gettype($resource->getAllowedMimetypes()));
         $this->assertJson($resource->getAllowedMimetypes());
     }
@@ -251,14 +251,17 @@ class ResourceTest extends TestCase
      *
      * @return void
      *
+     * @throws FileCannotBeAccessibleException
+     * @throws FileNotFoundException
      */
     public function test_get_mimetype_extensions()
     {
-        $this->assertTrue(file_exists(self::FILE_PATH));
-        $resource = new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
+        Storage::assertExists(self::TESTING_FILENAME);
+        $this->assertFileExists($this->fullFilenamePath);
+        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
 
         $this->assertEquals('array', gettype($resource->getTypeExtensions()));
-        $this->assertEquals('png', $resource->getTypeExtensions()[0]);
+        $this->assertContains('mp3', array_values($resource->getTypeExtensions()));
     }
 
     /**
@@ -269,11 +272,14 @@ class ResourceTest extends TestCase
      *
      * @return void
      *
+     * @throws FileCannotBeAccessibleException
+     * @throws FileNotFoundException
      */
     public function test_get_exception_when_type_is_empty()
     {
-        $this->assertTrue(file_exists(self::FILE_PATH));
-        $resource = new Resource(self::TESTING_RESOURCE_NAME, self::FILE_PATH);
+        Storage::assertExists(self::TESTING_FILENAME);
+        $this->assertFileExists($this->fullFilenamePath);
+        $resource = new Sound(self::TESTING_SOUND_NAME, $this->fullFilenamePath);
 
         // Use reflection to force an impossible situation, but need to cover
         // the exception

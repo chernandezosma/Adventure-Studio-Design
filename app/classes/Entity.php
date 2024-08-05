@@ -2,7 +2,7 @@
 /********************************************************************************
  * Project Name:    Adventure Studio Designer
  * Filename:        Entity.php
- * Description:      See the project README.md
+ * Description:     See the project README.md
  *
  * Founders:
  *      Cayetano H. Osma    <moesis@gmail.com>
@@ -28,10 +28,9 @@ namespace App\classes;
 
 use App\constants\Constants;
 use App\exceptions\CalculusImpossibleException;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
 
-class Entity extends asdbase
+class Entity extends ASDbase
 {
     /**
      * Entity's description
@@ -96,12 +95,11 @@ class Entity extends asdbase
      */
     public function __construct(string $name, string $description)
     {
-        if (empty($name) || empty($description)) {
+        parent::__construct($name);
+
+        if (empty($description)) {
             throw new InvalidArgumentException('Name and description must not be empty');
         }
-
-        $this->uuid = Str::uuid();
-        $this->name = $name;
         $this->description = new Description([
             Constants::NORMAL_DESCRIPTION => $description
         ]);

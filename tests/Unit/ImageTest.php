@@ -41,6 +41,7 @@ use Tests\TestCase;
 
 class ImageTest extends TestCase
 {
+    private const string TESTING_IMAGE_NAME = 'testing-image';
     private const string TESTING_FILENAME = 'testing_image.png';
     private const string TESTING_PATH = 'storage/framework/testing/disks/local/testing';
     private const string TESTING_FULL_FILE_PATH = self::TESTING_PATH . DIRECTORY_SEPARATOR . self::TESTING_FILENAME;
@@ -101,7 +102,7 @@ class ImageTest extends TestCase
      */
     public function test_constructor_with_correct_params()
     {
-        $resource = new Image(self::TESTING_FULL_FILE_PATH);
+        $resource = new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
         $this->assertNotNull($resource);
         $this->assertInstanceOf(Resource::class, $resource);
         $this->assertEquals(self::TESTING_FULL_FILE_PATH, $resource->getFilename());
@@ -136,7 +137,7 @@ class ImageTest extends TestCase
             DIRECTORY_SEPARATOR,
             $faker->name());
         $this->expectException(FileNotFoundException::class);
-        new Image($fullFilename);
+        new Image(self::TESTING_IMAGE_NAME, $fullFilename);
     }
 
     /**
@@ -153,7 +154,7 @@ class ImageTest extends TestCase
         $this->assertTrue(file_exists(self::TESTING_FULL_FILE_PATH));
         $this->assertTrue(chmod(self::TESTING_FULL_FILE_PATH, 600));
         $this->expectException(FileCannotBeAccessibleException::class);
-        new Image(self::TESTING_FULL_FILE_PATH);
+        new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
     }
 
     /**
@@ -168,7 +169,7 @@ class ImageTest extends TestCase
     public function test_set_hash_to_an_existing_file()
     {
         $this->assertTrue(file_exists(self::TESTING_FULL_FILE_PATH));
-        $resource = new Image(self::TESTING_FULL_FILE_PATH);
+        $resource = new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
         $hash = hash_file('sha256', self::TESTING_FULL_FILE_PATH, Constants::BINARY_FILE);
         $this->assertEquals($resource->createHash()->getHash(), $hash);
     }
@@ -185,7 +186,7 @@ class ImageTest extends TestCase
     public function test_mimetype_of_filename()
     {
         $this->assertTrue(file_exists(self::TESTING_FULL_FILE_PATH));
-        $resource = new Image(self::TESTING_FULL_FILE_PATH);
+        $resource = new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
         $this->assertEquals('image/png', $resource->getType());
     }
 
@@ -202,7 +203,7 @@ class ImageTest extends TestCase
     public function test_exception_change_unmatch_mimetype()
     {
         $this->assertTrue(file_exists(self::TESTING_FULL_FILE_PATH));
-        $resource = new Image(self::TESTING_FULL_FILE_PATH);
+        $resource = new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
         $this->expectException(InvalidMimeTypeException::class);
         $resource->setType('image/gif');
     }
@@ -220,7 +221,7 @@ class ImageTest extends TestCase
     public function test_exception_change_wrong_mimetype()
     {
         $this->assertTrue(file_exists(self::TESTING_FULL_FILE_PATH));
-        $resource = new Image(self::TESTING_FULL_FILE_PATH);
+        $resource = new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
         $this->expectException(InvalidArgumentException::class);
         $resource->setType('image/xxx');
     }
@@ -238,7 +239,7 @@ class ImageTest extends TestCase
     public function test_exception_change_the_mimetype()
     {
         $this->assertTrue(file_exists(self::TESTING_FULL_FILE_PATH));
-        $resource = new Image(self::TESTING_FULL_FILE_PATH);
+        $resource = new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
         $resource->setType('image/png');
         $this->assertEquals('image/png', $resource->getType());
     }
@@ -255,7 +256,7 @@ class ImageTest extends TestCase
     public function test_get_allowed_mimetypes_array()
     {
         $this->assertTrue(file_exists(self::TESTING_FULL_FILE_PATH));
-        $resource = new Image(self::TESTING_FULL_FILE_PATH);
+        $resource = new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
 
         $this->assertEquals('string', gettype($resource->getAllowedMimetypes()));
         $this->assertJson($resource->getAllowedMimetypes());
@@ -273,7 +274,7 @@ class ImageTest extends TestCase
     public function test_get_mimetype_extensions()
     {
         $this->assertTrue(file_exists(self::TESTING_FULL_FILE_PATH));
-        $resource = new Image(self::TESTING_FULL_FILE_PATH);
+        $resource = new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
 
         $this->assertEquals('array', gettype($resource->getTypeExtensions()));
         $this->assertEquals('png', $resource->getTypeExtensions()[0]);
@@ -291,7 +292,7 @@ class ImageTest extends TestCase
     public function test_get_exception_when_type_is_empty()
     {
         $this->assertTrue(file_exists(self::TESTING_FULL_FILE_PATH));
-        $resource = new Image(self::TESTING_FULL_FILE_PATH);
+        $resource = new Image(self::TESTING_IMAGE_NAME, self::TESTING_FULL_FILE_PATH);
 
         // Use reflection to force an impossible situation, but need to cover
         // the exception
