@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************
  * Project Name:    Adventure Studio Designer
- * Filename:        Image.php
+ * Filename:        Sound.php
  * Description:     See the project README.md
  *
  * Founders:
@@ -23,6 +23,7 @@
  * along with this program. You can read the licence itself at
  * <https://www.gnu.org/licenses/quick-guide-gplv3.html>.
  ********************************************************************************/
+
 namespace App\classes;
 
 use App\constants\Constants;
@@ -31,28 +32,21 @@ use App\exceptions\InvalidMimeTypeException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use InvalidArgumentException;
 
-class Image extends Resource
+class Sound extends Resource
 {
     /**
-     * Resource width in pixels
+     * Resource length of sound in seconds
      *
      * @var int
      */
-    protected int $width;
-
-    /**
-     * Resource height in pixels
-     *
-     * @var int
-     */
-    protected int $height;
+    protected int $length;
 
     /**
      * Image file types
      *
      * @var array
      */
-    private array $imageMimetypes;
+    private array $soundMimetypes;
 
     /**
      * Resource constructor.
@@ -66,71 +60,39 @@ class Image extends Resource
     public function __construct(string $name, string $filename)
     {
         parent::__construct($name, $filename);
-        $this->imageMimetypes = $this->getMimeTypesFor(Constants::IMAGE_MIME_TYPE);
-        $this->width = Constants::MINIMUM_WIDTH_SIZE;
-        $this->height = Constants::MINIMUM_HEIGHT_SIZE;
+        $this->soundMimetypes = $this->getMimeTypesFor(Constants::AUDIO_MIME_TYPE);
+        $this->length = Constants::MINIMUM_LENGTH_SIZE;
+        $this->type = $this->getFileMimeType();
     }
 
     /**
-     * Return the width of the resource (in pixels)
+     * Return the length of the resource (in seconds)
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
+     * @version Aug.2024
      *
      * @return int
      *
      */
-    public function getWidth(): int
+    public function getLength(): int
     {
-        return $this->width;
-    }
-
-    /**
-     * Set the width of the resource (in pixels)
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @param  int  $width
-     *
-     * @return $this
-     *
-     */
-    public function setWidth(int $width): Resource
-    {
-        $this->width = $width;
-
-        return $this;
-    }
-
-    /**
-     * Return the height of the resource (in pixels)
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
-     *
-     * @return int
-     *
-     */
-    public function getHeight(): int
-    {
-        return $this->height;
+        return $this->length;
     }
 
     /**
      * Set the resource height of the resource (in pixels))
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
+     * @version Aug.2024
      *
-     * @param  int  $height
+     * @param  int  $length
      *
      * @return $this
      *
      */
-    public function setHeight(int $height): Resource
+    public function setLength(int $length): Resource
     {
-        $this->height = $height;
+        $this->length = $length;
 
         return $this;
     }
@@ -139,7 +101,7 @@ class Image extends Resource
      * Set the mimetype of the resource
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
+     * @version Aug.2024
      *
      * @param  string  $type
      *
@@ -150,12 +112,8 @@ class Image extends Resource
      */
     public function setType(string $type): Resource
     {
-        if (!in_array($type, $this->imageMimetypes)) {
-            throw new InvalidArgumentException('The given mimetype must be valid and allowed. See allowedMimetypes()');
-        }
-
-        if ($type !== mime_content_type($this->filename)) {
-            throw new InvalidMimeTypeException('The mimetype given does not match the file mimetype.');
+        if (!in_array($type, $this->soundMimetypes) || $type !== mime_content_type($this->filename)) {
+            throw new InvalidMimeTypeException('The given mimetype must be valid and allowed. See allowedMimetypes()');
         }
 
         $this->type = $type;
@@ -167,12 +125,11 @@ class Image extends Resource
      * Return the list of allowed mimetypes in JSON format
      *
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Jul.2024
+     * @version Aug.2024
      *
      */
     public function getAllowedMimetypes(): string
     {
-        return json_encode($this->imageMimetypes, JSON_UNESCAPED_SLASHES);
+        return json_encode($this->soundMimetypes, JSON_UNESCAPED_SLASHES);
     }
-
 }

@@ -10,8 +10,13 @@ class Constants
 
     public const int MINIMUM_WIDTH_SIZE = 1;
     public const int MINIMUM_HEIGHT_SIZE = 1;
+    public const int MINIMUM_LENGTH_SIZE = 1;
 
     public const bool BINARY_FILE = true;
+
+    public const string AUDIO_MIME_TYPE = 'audio';
+    public const string VIDEO_MIME_TYPE = 'video';
+    public const string IMAGE_MIME_TYPE = 'image';
 
     // @see https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
     public const array MIME_TYPES = [

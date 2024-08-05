@@ -2,7 +2,7 @@
 /********************************************************************************
  * Project Name:    Adventure Studio Designer
  * Filename:        Resource.php
- * Description:      See the project README.md
+ * Description:     See the project README.md
  *
  * Founders:
  *      Cayetano H. Osma    <moesis@gmail.com>
@@ -31,7 +31,7 @@ use App\exceptions\InvalidMimeTypeException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use InvalidArgumentException;
 
-class Resource extends asdbase
+class Resource extends ASDbase
 {
     /**
      * Hash of the resource content
@@ -62,8 +62,9 @@ class Resource extends asdbase
      * @throws FileNotFoundException
      * @throws FileCannotBeAccessibleException
      */
-    public function __construct(string $filename)
+    public function __construct(string $name, string $filename)
     {
+        parent::__construct($name);
         if (!file_exists($filename)) {
             throw new FileNotFoundException('The file does not exists');
         }
@@ -77,6 +78,31 @@ class Resource extends asdbase
         if ($this->filename) {
             $this->createHash();
         }
+    }
+
+    /**
+     * Returns the mime types of the given type of resouce (image, audio, video or text)
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @param  string  $type
+     *
+     * @return array
+     *
+     */
+    protected function getMimeTypesFor(string $type): array
+    {
+        return array_filter(array_map(
+            function($item) use ($type) {
+                if (str_contains($item, $type)) {
+                    return $item;
+                }
+
+                return false;
+            },
+            array_keys(Constants::MIME_TYPES)
+        ));
     }
 
     /**

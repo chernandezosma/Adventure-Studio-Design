@@ -44,6 +44,47 @@ return [
             'throw' => false,
         ],
 
+        'images' => [
+            'driver' => 'local',
+            'root' => storage_path('app/asd/images'),
+            'url' => env('APP_URL').'/storage/images',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'sounds' => [
+            'driver' => 'local',
+            'root' => storage_path('app/asd/sounds'),
+            'url' => env('APP_URL').'/storage/sounds',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'videos' => [
+            'driver' => 'local',
+            'root' => storage_path('app/videos'),
+            'url' => env('APP_URL').'/storage/videos',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'testing' => [
+            'driver' => 'local',
+            'root' => storage_path('app/testing'),
+            'url' => env('APP_URL').'/storage/testing',
+            'permissions' => [
+                'file' => [
+                    'public' => 0644,
+                    'private' => 0600,
+                ],
+                'dir' => [
+                    'public' => 0744,
+                    'private' => 0700,
+                ],
+            ],
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

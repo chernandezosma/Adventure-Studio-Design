@@ -2,7 +2,7 @@
 /********************************************************************************
  * Project Name:    Adventure Studio Designer
  * Filename:        Position.php
- * Description:      See the project README.md
+ * Description:     See the project README.md
  *
  * Founders:
  *      Cayetano H. Osma    <moesis@gmail.com>
