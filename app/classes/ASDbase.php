@@ -94,10 +94,10 @@ class ASDbase
      *
      * @param  string  $name
      *
-     * @return $this
+     * @return ASDBase
      *
      */
-    public function setName(string $name): Entity
+    public function setName(string $name): ASDBase
     {
         if (empty($name)) {
             throw new InvalidArgumentException('name is required');

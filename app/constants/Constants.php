@@ -18,7 +18,15 @@ class Constants
     public const string VIDEO_MIME_TYPE = 'video';
     public const string IMAGE_MIME_TYPE = 'image';
 
-    // @see https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
+    /*
+    |--------------------------------------------------------------------------
+    | MimeTypes
+    |--------------------------------------------------------------------------
+    |
+    | The list of available mimetypes for audio, video, image and text files
+    |
+    | @see https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
+    */
     public const array MIME_TYPES = [
         'audio/midi' => ['mid', 'midi', 'kar', 'rmi'],
         'audio/mp4' => ['m4a', 'mp4a'],
@@ -59,4 +67,38 @@ class Constants
         'video/x-ms-wmv' => ['wmv'],
         'video/x-msvideo' => ['avi']
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Target platforms
+    |--------------------------------------------------------------------------
+    |
+    | The list of supported target platforms.
+    |
+    */
+    public const int TARGET_SYSTEM_WEB = 0;     // PC
+    public const int TARGET_SYSTEM_WIN = 1;     // PC
+    public const int TARGET_SYSTEM_MAC_OS = 2;  // PC
+    public const int TARGET_SYSTEM_LINUX = 3;   // PC
+    public const int TARGET_SYSTEM_SPE = 4;     // SPECTRUM
+    public const int TARGET_SYSTEM_CBM64 = 5;   // COMODORE 64
+    public const int TARGET_SYSTEM_CPC = 6;     // AMSTRAD CPC
+    public const int TARGET_SYSTEM_MSX = 7;     // MSX
+    public const int TARGET_SYSTEM_ST = 8;      // ATARI ST
+    public const int TARGET_SYSTEM_AMIGA = 9;   // AMIGA
+    public const int TARGET_SYSTEM_PCW = 10;    // AMSTRAD PCW
+
+    /*
+    |--------------------------------------------------------------------------
+    | Game modes
+    |--------------------------------------------------------------------------
+    |
+    | Modes what the game can be executed.
+    |
+    */
+    public const int DEBUG_MODE = 0;        // Debug mode. All message are shown in console.
+    public const int PRODUCTION_MODE = 1;   // Production mode. No messages except the critical ones
+    public const int TEST_MODE = 2;         // Testing mode. Full logs.
+
+
 }
