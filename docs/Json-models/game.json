@@ -1,11 +1,11 @@
 {
     "DAAD": {
-        "comment": "DAAD section to keep backguard compatibility",
+        "comment": "DAAD section to keep backward compatibility",
         "score": "copy of score main key",
         "flags": ["representation of the 255 flags which DAAD handles"]
     },
-    "uuid": "Scene identifier",
-    "name": "name of the scene",
+    - "uuid": "Scene identifier",
+    - "name": "name of the scene",
     "image": "path or base64 of image to represent the scene",
     "score": "score of the game resolution",
     "languages": ["languages supported by the game"],
