@@ -30,6 +30,9 @@ use InvalidArgumentException;
 
 class Description
 {
+    public const string NORMAL_DESCRIPTION_KEY = 'normal';
+    public const string SMELL_DESCRIPTION_KEY = 'smell';
+    public const string SOUND_DESCRIPTION_KEY = 'sound';
 
     /**
      * Description of the object.
@@ -59,23 +62,28 @@ class Description
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $descriptions = [])
+    public function __construct(?array $descriptions = [])
     {
-        if (count($descriptions) === 0 ||
-            !in_array(Constants::NORMAL_DESCRIPTION, array_keys($descriptions)) ||
-            empty($descriptions[Constants::NORMAL_DESCRIPTION])) {
-            throw new InvalidArgumentException('You must provide at least a normal description of the object.');
-        }
+//        if (count($descriptions) === 0 ||
+//            !in_array(Constants::NORMAL_DESCRIPTION, array_keys($descriptions)) ||
+//            empty($descriptions[Constants::NORMAL_DESCRIPTION])) {
+//            throw new InvalidArgumentException('You must provide at least a normal description of the object.');
+//        }
 
+        $this->normal = '';
         $this->smell = '';
         $this->sound = '';
 
-        $this->normal = $descriptions[Constants::NORMAL_DESCRIPTION];
-        if (in_array(Constants::SMELL_DESCRIPTION, array_keys($descriptions))) {
-            $this->smell = empty($descriptions[Constants::SMELL_DESCRIPTION]) ? '' : $descriptions[Constants::SMELL_DESCRIPTION];
+        if (in_array(Description::NORMAL_DESCRIPTION_KEY, array_keys($descriptions))) {
+            $this->normal = empty($descriptions[Description::NORMAL_DESCRIPTION_KEY]) ? '' : $descriptions[Description::NORMAL_DESCRIPTION_KEY];
         }
-        if (in_array(Constants::SOUND_DESCRIPTION, array_keys($descriptions))) {
-            $this->sound = empty($descriptions[Constants::SOUND_DESCRIPTION]) ? '' : $descriptions[Constants::SOUND_DESCRIPTION];
+
+        if (in_array(Description::SMELL_DESCRIPTION_KEY, array_keys($descriptions))) {
+            $this->smell = empty($descriptions[Description::SMELL_DESCRIPTION_KEY]) ? '' : $descriptions[Description::SMELL_DESCRIPTION_KEY];
+        }
+
+        if (in_array(Description::SOUND_DESCRIPTION_KEY, array_keys($descriptions))) {
+            $this->sound = empty($descriptions[Description::SOUND_DESCRIPTION_KEY]) ? '' : $descriptions[Description::SOUND_DESCRIPTION_KEY];
         }
     }
 

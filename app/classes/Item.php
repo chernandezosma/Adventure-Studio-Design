@@ -30,7 +30,7 @@ use App\constants\Constants;
 use App\exceptions\CalculusImpossibleException;
 use InvalidArgumentException;
 
-class Entity extends ASDbase
+class Item extends Base
 {
     /**
      * Entity's description
@@ -101,7 +101,7 @@ class Entity extends ASDbase
             throw new InvalidArgumentException('Name and description must not be empty');
         }
         $this->description = new Description([
-            Constants::NORMAL_DESCRIPTION => $description
+            Description::NORMAL_DESCRIPTION_KEY => $description
         ]);
         $this->weight = 0.0;
         $this->height = 0.0;
@@ -136,7 +136,7 @@ class Entity extends ASDbase
      * @return $this
      *
      */
-    public function setDescription(?Description $description): Entity
+    public function setDescription(?Description $description): Item
     {
         $this->description = $description;
 
@@ -168,7 +168,7 @@ class Entity extends ASDbase
      * @return $this
      *
      */
-    public function setWeight(float $weight): Entity
+    public function setWeight(float $weight): Item
     {
         if ($weight < 0) {
             throw new InvalidArgumentException('Weight must be a positive value.');
@@ -203,7 +203,7 @@ class Entity extends ASDbase
      * @return $this
      *
      */
-    public function setHeight(float $height): Entity
+    public function setHeight(float $height): Item
     {
         if ($height <= 0) {
             throw new InvalidArgumentException('Height must be a positive value greater than zero.');
@@ -238,7 +238,7 @@ class Entity extends ASDbase
      * @return $this
      *
      */
-    public function setWidth(float $width): Entity
+    public function setWidth(float $width): Item
     {
         if ($width <= 0) {
             throw new InvalidArgumentException('Width must be a positive value greater than zero.');
@@ -273,7 +273,7 @@ class Entity extends ASDbase
      * @return $this
      *
      */
-    public function setDepth(float $depth): Entity
+    public function setDepth(float $depth): Item
     {
         if ($depth < 0) {
             throw new InvalidArgumentException('Depth must be a positive value.');
@@ -308,7 +308,7 @@ class Entity extends ASDbase
      * @return $this
      *
      */
-    public function setPosition(Position $position): Entity
+    public function setPosition(Position $position): Item
     {
         $this->position = $position;
 
@@ -340,7 +340,7 @@ class Entity extends ASDbase
      * @return $this
      *
      */
-    public function setAttributes(array $attributes): Entity
+    public function setAttributes(array $attributes): Item
     {
         $this->attributes = $attributes;
 

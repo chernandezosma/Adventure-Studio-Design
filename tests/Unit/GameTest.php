@@ -63,7 +63,6 @@ class GameTest extends TestCase
         $this->assertNull($game->getCopyright());
         $this->assertNull($game->getTitle());
         $this->assertEquals('0.0.1', $game->getVersion());
-        $this->assertNull($game->getDescription());
         $this->assertEquals(0, $game->getScore());
     }
 
@@ -82,12 +81,30 @@ class GameTest extends TestCase
         new Game(null);
     }
 
+    /**
+     * Test the constructor with empty Name
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_constructor_with_empty_name()
     {
         $this->expectException(InvalidArgumentException::class);
         new Game('');
     }
 
+    /**
+     * Test class setters
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_setters()
     {
         $game = new Game(self::GAME_NAME);
@@ -96,10 +113,18 @@ class GameTest extends TestCase
 
         $this->assertNull($game->getOutputFile());
         $this->assertNull($game->getEntrypoint());
-        $this->assertNull($game->getDescription());
         $this->assertEquals(0, $game->getScore());
     }
 
+    /**
+     * Test set_name method with correct parameters
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_game_name()
     {
         $game = new Game(self::GAME_NAME);
@@ -110,6 +135,15 @@ class GameTest extends TestCase
         $this->assertEquals('New adventure name', $game->getName());
     }
 
+    /**
+     * Test set_name with wrong parameters for name
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_wrong_values_for_game_name()
     {
         $game = new Game(self::GAME_NAME);
@@ -120,6 +154,15 @@ class GameTest extends TestCase
         $game->setName('');
     }
 
+    /**
+     * Test the method set_author with correct parameters for author
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_author()
     {
         $game = new Game(self::GAME_NAME);
@@ -130,6 +173,15 @@ class GameTest extends TestCase
         $this->assertEquals(self::GAME_AUTHOR, $game->getAuthor());
     }
 
+    /**
+     * Test the set_author method with wrong parameters
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_wrong_values_for_author()
     {
         $game = new Game(self::GAME_NAME);
@@ -140,6 +192,15 @@ class GameTest extends TestCase
         $game->setAuthor('');
     }
 
+    /**
+     * Test set_languages with known languages
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_languages()
     {
         $game = new Game(self::GAME_NAME);
@@ -150,6 +211,15 @@ class GameTest extends TestCase
         $this->assertEquals([Languages::US_ENGLISH, Languages::ARGENTINA_SPANISH], $game->getLanguages());
     }
 
+    /**
+     * Test set_languages with empty languages array
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_wrong_values_for_languages()
     {
         $game = new Game(self::GAME_NAME);
@@ -160,6 +230,15 @@ class GameTest extends TestCase
         $game->setLanguages([]);
     }
 
+    /**
+     * Test set the target platform with well-known platforms
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_target_platform()
     {
         $game = new Game(self::GAME_NAME);
@@ -170,6 +249,15 @@ class GameTest extends TestCase
         $this->assertEquals([Constants::TARGET_SYSTEM_WIN, Constants::TARGET_SYSTEM_MAC_OS], $game->getTargetPlatform());
     }
 
+    /**
+     * Test set the target platform with empty platforms array
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_wrong_target_platform()
     {
         $game = new Game(self::GAME_NAME);
@@ -180,6 +268,15 @@ class GameTest extends TestCase
         $this->assertEquals([Constants::TARGET_SYSTEM_WEB], $game->getTargetPlatform());
     }
 
+    /**
+     * Test the game mode with correct value
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_production_mode()
     {
         $game = new Game(self::GAME_NAME);
@@ -190,6 +287,15 @@ class GameTest extends TestCase
         $this->assertEquals(Constants::PRODUCTION_MODE, $game->getMode());
     }
 
+    /**
+     * Test the game mode with an empty array
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_wrong_production_mode()
     {
         $game = new Game(self::GAME_NAME);
@@ -200,6 +306,15 @@ class GameTest extends TestCase
         $this->assertEquals(Constants::DEBUG_MODE, $game->getMode());
     }
 
+    /**
+     * Test the output compiled file with correct name
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_output_file()
     {
         $game = new Game(self::GAME_NAME);
@@ -208,8 +323,23 @@ class GameTest extends TestCase
 
         $game->setOutputFile('game.exe');
         $this->assertEquals('game.exe', $game->getOutputFile());
+
+        $game->setOutputFile('');
+        $this->assertEquals('', $game->getOutputFile());
+
+        $game->setOutputFile(null);
+        $this->assertEquals(null, $game->getOutputFile());
     }
 
+    /**
+     * Test the set copyright function with empty and filled copyright notice
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_copyright_notice()
     {
         $game = new Game(self::GAME_NAME);
@@ -223,6 +353,15 @@ class GameTest extends TestCase
         $this->assertEquals('This is a copyright notice', $game->getCopyright());
     }
 
+    /**
+     * Test the set_title function with a valid title and empty one
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_title()
     {
         $game = new Game(self::GAME_NAME);
@@ -236,6 +375,15 @@ class GameTest extends TestCase
         $this->assertEquals('', $game->getTitle());
     }
 
+    /**
+     * Test setting the game version
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_version()
     {
         $game = new Game(self::GAME_NAME);
@@ -248,16 +396,15 @@ class GameTest extends TestCase
         $this->assertEquals('1.2.3', $game->getVersion());
     }
 
-    public function test_set_description()
-    {
-        $game = new Game(self::GAME_NAME);
-        $this->assertNotNull($game);
-        $this->assertInstanceOf(Game::class, $game);
-
-        $game->setDescription('new description');
-        $this->assertEquals('new description', $game->getDescription());
-    }
-
+    /**
+     * Testing set the score
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_score()
     {
         $game = new Game(self::GAME_NAME);
@@ -271,7 +418,15 @@ class GameTest extends TestCase
         $this->assertEquals(110, $game->getScore());
     }
 
-
+    /**
+     * Set the entrypoint for the game
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return void
+     *
+     */
     public function test_set_entry_point()
     {
         $game = new Game(self::GAME_NAME);
@@ -285,6 +440,5 @@ class GameTest extends TestCase
         $game->setEntryPoint(null);
         $this->assertEquals(null, $game->getEntrypoint());
     }
-
 }
 

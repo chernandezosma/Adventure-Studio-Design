@@ -6,45 +6,46 @@ use App\constants\Constants;
 use App\classes\Description;
 use InvalidArgumentException;
 use Tests\TestCase;
+use TypeError;
 
 class DescriptionTest extends TestCase
 {
     private const array NO_NORMAL_DECRIPTION = [
-        Constants::NORMAL_DESCRIPTION => '',
-        Constants::SMELL_DESCRIPTION => 'smell description',
-        Constants::SOUND_DESCRIPTION => 'sound description'
+        Description::NORMAL_DESCRIPTION_KEY => '',
+        Description::SMELL_DESCRIPTION_KEY => 'smell description',
+        Description::SOUND_DESCRIPTION_KEY => 'sound description'
     ];
 
     private const array ONLY_NORMAL_DESCRIPTION =
     [
-        Constants::NORMAL_DESCRIPTION => 'Normal description'
+        Description::NORMAL_DESCRIPTION_KEY => 'Normal description'
     ];
 
     private const array DESCRIPTIONS = [
         [
-            Constants::NORMAL_DESCRIPTION => 'Normal description',
-            Constants::SMELL_DESCRIPTION => 'smell description',
-            Constants::SOUND_DESCRIPTION => 'sound description'
+            Description::NORMAL_DESCRIPTION_KEY => 'Normal description',
+            Description::SMELL_DESCRIPTION_KEY => 'smell description',
+            Description::SOUND_DESCRIPTION_KEY => 'sound description'
         ],
         [
-            Constants::NORMAL_DESCRIPTION => 'Normal description2',
-            Constants::SMELL_DESCRIPTION => '',
-            Constants::SOUND_DESCRIPTION => 'sound description2'
+            Description::NORMAL_DESCRIPTION_KEY => 'Normal description2',
+            Description::SMELL_DESCRIPTION_KEY => '',
+            Description::SOUND_DESCRIPTION_KEY => 'sound description2'
         ],
         [
-            Constants::NORMAL_DESCRIPTION => 'Normal description3',
-            Constants::SMELL_DESCRIPTION => null,
-            Constants::SOUND_DESCRIPTION => 'sound description3'
+            Description::NORMAL_DESCRIPTION_KEY => 'Normal description3',
+            Description::SMELL_DESCRIPTION_KEY => null,
+            Description::SOUND_DESCRIPTION_KEY => 'sound description3'
         ],
         [
-            Constants::NORMAL_DESCRIPTION => 'Normal description4',
-            Constants::SMELL_DESCRIPTION => '',
-            Constants::SOUND_DESCRIPTION => ''
+            Description::NORMAL_DESCRIPTION_KEY => 'Normal description4',
+            Description::SMELL_DESCRIPTION_KEY => '',
+            Description::SOUND_DESCRIPTION_KEY => ''
         ],
         [
-            Constants::NORMAL_DESCRIPTION => 'Normal description4',
-            Constants::SMELL_DESCRIPTION => null,
-            Constants::SOUND_DESCRIPTION => null
+            Description::NORMAL_DESCRIPTION_KEY => 'Normal description4',
+            Description::SMELL_DESCRIPTION_KEY => null,
+            Description::SOUND_DESCRIPTION_KEY => null
         ],
     ];
 
@@ -56,9 +57,9 @@ class DescriptionTest extends TestCase
     {
         foreach ($this::DESCRIPTIONS as $description) {
             $descriptionObject = new Description($description);
-            $this->assertEquals($description[Constants::NORMAL_DESCRIPTION], $descriptionObject->getNormalDescription());
-            $this->assertEquals($description[Constants::SMELL_DESCRIPTION], $descriptionObject->getSmellDescription());
-            $this->assertEquals($description[Constants::SOUND_DESCRIPTION], $descriptionObject->getSoundDescription());
+            $this->assertEquals($description[Description::NORMAL_DESCRIPTION_KEY], $descriptionObject->getNormalDescription());
+            $this->assertEquals($description[Description::SMELL_DESCRIPTION_KEY], $descriptionObject->getSmellDescription());
+            $this->assertEquals($description[Description::SOUND_DESCRIPTION_KEY], $descriptionObject->getSoundDescription());
         }
     }
 
@@ -68,21 +69,25 @@ class DescriptionTest extends TestCase
     public function test_only_description_option()
     {
         $descriptionObject = new Description($this::ONLY_NORMAL_DESCRIPTION);
-        $this->assertEquals($this::ONLY_NORMAL_DESCRIPTION[Constants::NORMAL_DESCRIPTION], $descriptionObject->getNormalDescription());
+        $this->assertEquals($this::ONLY_NORMAL_DESCRIPTION[Description::NORMAL_DESCRIPTION_KEY], $descriptionObject->getNormalDescription());
         $this->assertEquals('', $descriptionObject->getSmellDescription());
         $this->assertEquals('', $descriptionObject->getSoundDescription());
     }
 
     public function test_exception_with_no_description_in_constructor()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $descriptionObject = new Description($this::NO_NORMAL_DECRIPTION);
+        $this->expectException(TypeError::class);
+        $descriptionObject = new Description(null);
     }
 
     public function test_exception_with_empty_array_as_constructor_parameter()
     {
-        $this->expectException(InvalidArgumentException::class);
         $descriptionObject = new Description([]);
+        $this->assertInstanceOf(Description::class, $descriptionObject);
+
+        $this->assertEmpty($descriptionObject->getNormalDescription());
+        $this->assertEmpty($descriptionObject->getSmellDescription());
+        $this->assertEmpty($descriptionObject->getSoundDescription());
     }
 
     /**
@@ -91,24 +96,24 @@ class DescriptionTest extends TestCase
     public function test_getters_and_setters(): void
     {
         $descriptionObject = new Description([
-            Constants::NORMAL_DESCRIPTION => Constants::NORMAL_DESCRIPTION,
-            Constants::SMELL_DESCRIPTION => Constants::SMELL_DESCRIPTION,
-            Constants::SOUND_DESCRIPTION => Constants::SOUND_DESCRIPTION
+            Description::NORMAL_DESCRIPTION_KEY => Description::NORMAL_DESCRIPTION_KEY,
+            Description::SMELL_DESCRIPTION_KEY => Description::SMELL_DESCRIPTION_KEY,
+            Description::SOUND_DESCRIPTION_KEY => Description::SOUND_DESCRIPTION_KEY
         ]);
-        $this->assertEquals(Constants::NORMAL_DESCRIPTION, $descriptionObject->getNormalDescription());
-        $this->assertEquals(Constants::SMELL_DESCRIPTION, $descriptionObject->getSmellDescription());
-        $this->assertEquals(Constants::SOUND_DESCRIPTION, $descriptionObject->getSoundDescription());
+        $this->assertEquals(Description::NORMAL_DESCRIPTION_KEY, $descriptionObject->getNormalDescription());
+        $this->assertEquals(Description::SMELL_DESCRIPTION_KEY, $descriptionObject->getSmellDescription());
+        $this->assertEquals(Description::SOUND_DESCRIPTION_KEY, $descriptionObject->getSoundDescription());
 
         foreach ($this::DESCRIPTIONS as $description) {
             $descriptionObject = new Description($description);
 
-            $descriptionObject->setNormalDescription($description[Constants::NORMAL_DESCRIPTION]);
-            $descriptionObject->setSmellDescription($description[Constants::SMELL_DESCRIPTION]);
-            $descriptionObject->setSoundDescription($description[Constants::SOUND_DESCRIPTION]);
+            $descriptionObject->setNormalDescription($description[Description::NORMAL_DESCRIPTION_KEY]);
+            $descriptionObject->setSmellDescription($description[Description::SMELL_DESCRIPTION_KEY]);
+            $descriptionObject->setSoundDescription($description[Description::SOUND_DESCRIPTION_KEY]);
 
-            $this->assertEquals($description[Constants::NORMAL_DESCRIPTION], $descriptionObject->getNormalDescription());
-            $this->assertEquals($description[Constants::SMELL_DESCRIPTION], $descriptionObject->getSmellDescription());
-            $this->assertEquals($description[Constants::SOUND_DESCRIPTION], $descriptionObject->getSoundDescription());
+            $this->assertEquals($description[Description::NORMAL_DESCRIPTION_KEY], $descriptionObject->getNormalDescription());
+            $this->assertEquals($description[Description::SMELL_DESCRIPTION_KEY], $descriptionObject->getSmellDescription());
+            $this->assertEquals($description[Description::SOUND_DESCRIPTION_KEY], $descriptionObject->getSoundDescription());
         }
     }
 }

@@ -4,10 +4,6 @@ namespace App\constants;
 
 class Constants
 {
-    public const string NORMAL_DESCRIPTION = 'normal';
-    public const string SMELL_DESCRIPTION = 'smell';
-    public const string SOUND_DESCRIPTION = 'sound';
-
     public const int MINIMUM_WIDTH_SIZE = 1;
     public const int MINIMUM_HEIGHT_SIZE = 1;
     public const int MINIMUM_LENGTH_SIZE = 1;

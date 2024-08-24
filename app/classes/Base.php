@@ -29,7 +29,7 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Ramsey\Uuid\UuidInterface;
 
-class ASDbase
+class Base
 {
     /**
      * UUID for the entity. It must be unique along the whole project
@@ -46,16 +46,24 @@ class ASDbase
     protected string $name;
 
     /**
+     * Entity description
+     *
+     * @var Description|null
+     */
+    protected ?Description $description;
+
+    /**
      * @param  string  $name
      */
     public function __construct(string $name)
     {
         if (empty($name)) {
-            throw new InvalidArgumentException('Name parameter is required');
+            throw new InvalidArgumentException('Name property is required');
         }
 
         $this->uuid = Str::uuid();
         $this->name = $name;
+        $this->description = new Description();
     }
 
     /**
@@ -64,7 +72,7 @@ class ASDbase
      * @author Cayetano H. Osma <chernandez@elestadoweb.com>
      * @version Jul.2024
      *
-     * @return string
+     * @return UuidInterface
      *
      */
     public function getUuid(): UuidInterface
@@ -94,13 +102,13 @@ class ASDbase
      *
      * @param  string  $name
      *
-     * @return ASDBase
+     * @return Base
      *
      */
-    public function setName(string $name): ASDBase
+    public function setName(string $name): Base
     {
         if (empty($name)) {
-            throw new InvalidArgumentException('name is required');
+            throw new InvalidArgumentException('Name property is required');
         }
 
         $this->name = $name;
@@ -108,4 +116,35 @@ class ASDbase
         return $this;
     }
 
+    /**
+     * Return the item description
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @return Description|null
+     *
+     */
+    public function getDescription(): ?Description
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set the item description
+     *
+     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
+     * @version Aug.2024
+     *
+     * @param  Description|null  $description
+     *
+     * @return $this
+     *
+     */
+    public function setDescription(?Description $description): Base
+    {
+        $this->description = $description;
+
+        return $this;
+    }
 }

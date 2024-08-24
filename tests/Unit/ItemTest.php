@@ -3,22 +3,20 @@
 namespace Tests\Unit;
 
 use App\classes\Description;
-use App\classes\Entity;
+use App\classes\Item;
 use App\classes\Position;
 use App\constants\Constants;
 use App\enums\EntityAttributes;
 use App\exceptions\CalculusImpossibleException;
-use ErrorException;
 use Faker\Factory;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Tests\TestCase;
 use TypeError;
 
-class EntityTest extends TestCase
+class ItemTest extends TestCase
 {
-    private const string ENTITY_NAME = 'Entity Name';
-    private const string ENTITY_DESCRIPTION = 'Entity Description';
+    private const string ITEM_NAME = 'Item Name';
+    private const string ITEM_DESCRIPTION = 'Item Description';
 
     /**
      * Test a failed constructor. I have not description.
@@ -32,7 +30,7 @@ class EntityTest extends TestCase
     public function test_failed_constructor_no_name()
     {
         $this->expectException(TypeError::class);
-        new Entity(null, $this::ENTITY_DESCRIPTION);
+        new Item(null, $this::ITEM_DESCRIPTION);
     }
 
     /**
@@ -47,7 +45,7 @@ class EntityTest extends TestCase
     public function test_failed_constructor_empty_name()
     {
         $this->expectException(InvalidArgumentException::class);
-        new Entity('', $this::ENTITY_DESCRIPTION);
+        new Item('', $this::ITEM_DESCRIPTION);
     }
 
     /**
@@ -62,7 +60,7 @@ class EntityTest extends TestCase
     public function test_failed_constructor_no_description()
     {
         $this->expectException(TypeError::class);
-        new Entity($this::ENTITY_NAME, null);
+        new Item($this::ITEM_NAME, null);
     }
 
     /**
@@ -77,7 +75,7 @@ class EntityTest extends TestCase
     public function test_failed_constructor_empty_description()
     {
         $this->expectException(InvalidArgumentException::class);
-        new Entity($this::ENTITY_NAME, '');
+        new Item($this::ITEM_NAME, '');
     }
 
     /**
@@ -91,19 +89,19 @@ class EntityTest extends TestCase
      */
     public function test_constructor()
     {
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
 
-        $this->assertEquals($this::ENTITY_NAME, $entity->getName());
-        $this->assertEquals($this::ENTITY_DESCRIPTION, $entity->getDescription()->getNormalDescription());
-        $this->assertNotEmpty($entity->getUuid());
-        $this->assertEquals(0.0, $entity->getWidth());
-        $this->assertEquals(0.0, $entity->getHeight());
-        $this->assertEquals(0.0, $entity->getDepth());
-        $this->assertEquals(0.0, $entity->getWeight());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionX());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionY());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionZ());
-        $this->assertEquals([], $entity->getAttributes());
+        $this->assertEquals($this::ITEM_NAME, $Item->getName());
+        $this->assertEquals($this::ITEM_DESCRIPTION, $Item->getDescription()->getNormalDescription());
+        $this->assertNotEmpty($Item->getUuid());
+        $this->assertEquals(0.0, $Item->getWidth());
+        $this->assertEquals(0.0, $Item->getHeight());
+        $this->assertEquals(0.0, $Item->getDepth());
+        $this->assertEquals(0.0, $Item->getWeight());
+        $this->assertEquals(0.0, $Item->getPosition()->getPositionX());
+        $this->assertEquals(0.0, $Item->getPosition()->getPositionY());
+        $this->assertEquals(0.0, $Item->getPosition()->getPositionZ());
+        $this->assertEquals([], $Item->getAttributes());
     }
 
     /**
@@ -117,21 +115,21 @@ class EntityTest extends TestCase
      */
     public function test_set_name_without_value()
     {
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
 
-        $this->assertEquals($this::ENTITY_DESCRIPTION, $entity->getDescription()->getNormalDescription());
-        $this->assertEquals($this::ENTITY_NAME, $entity->getName());
-        $this->assertEquals(0.0, $entity->getWidth());
-        $this->assertEquals(0.0, $entity->getHeight());
-        $this->assertEquals(0.0, $entity->getDepth());
-        $this->assertEquals(0.0, $entity->getWeight());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionX());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionY());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionZ());
-        $this->assertEquals([], $entity->getAttributes());
+        $this->assertEquals($this::ITEM_DESCRIPTION, $Item->getDescription()->getNormalDescription());
+        $this->assertEquals($this::ITEM_NAME, $Item->getName());
+        $this->assertEquals(0.0, $Item->getWidth());
+        $this->assertEquals(0.0, $Item->getHeight());
+        $this->assertEquals(0.0, $Item->getDepth());
+        $this->assertEquals(0.0, $Item->getWeight());
+        $this->assertEquals(0.0, $Item->getPosition()->getPositionX());
+        $this->assertEquals(0.0, $Item->getPosition()->getPositionY());
+        $this->assertEquals(0.0, $Item->getPosition()->getPositionZ());
+        $this->assertEquals([], $Item->getAttributes());
 
         $this->expectException(InvalidArgumentException::class);
-        $entity->setName('');
+        $Item->setName('');
     }
 
     /**
@@ -148,58 +146,58 @@ class EntityTest extends TestCase
         $faker = Factory::create();
         $name = $faker->name();
 
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-        $this->assertEquals($this::ENTITY_DESCRIPTION, $entity->getDescription()->getNormalDescription());
-        $this->assertEquals($this::ENTITY_NAME, $entity->getName());
-        $this->assertEquals(0.0, $entity->getWidth());
-        $this->assertEquals(0.0, $entity->getHeight());
-        $this->assertEquals(0.0, $entity->getDepth());
-        $this->assertEquals(0.0, $entity->getWeight());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionX());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionY());
-        $this->assertEquals(0.0, $entity->getPosition()->getPositionZ());
-        $this->assertEquals([], $entity->getAttributes());
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
+        $this->assertEquals($this::ITEM_DESCRIPTION, $Item->getDescription()->getNormalDescription());
+        $this->assertEquals($this::ITEM_NAME, $Item->getName());
+        $this->assertEquals(0.0, $Item->getWidth());
+        $this->assertEquals(0.0, $Item->getHeight());
+        $this->assertEquals(0.0, $Item->getDepth());
+        $this->assertEquals(0.0, $Item->getWeight());
+        $this->assertEquals(0.0, $Item->getPosition()->getPositionX());
+        $this->assertEquals(0.0, $Item->getPosition()->getPositionY());
+        $this->assertEquals(0.0, $Item->getPosition()->getPositionZ());
+        $this->assertEquals([], $Item->getAttributes());
 
-        $entity->setName($name);
-        $this->assertEquals($name, $entity->getName());
+        $Item->setName($name);
+        $this->assertEquals($name, $Item->getName());
 
         $description = $faker->sentence();
-        $descriptions = new Description([Constants::NORMAL_DESCRIPTION => $description]);
-        $entity->setDescription($descriptions);
-        $this->assertEquals($description, $entity->getDescription()->getNormalDescription());
+        $descriptions = new Description([Description::NORMAL_DESCRIPTION_KEY => $description]);
+        $Item->setDescription($descriptions);
+        $this->assertEquals($description, $Item->getDescription()->getNormalDescription());
 
         $value = $faker->randomFloat();
-        $entity->setWeight($value);
-        $this->assertEquals($value, $entity->getWeight());
+        $Item->setWeight($value);
+        $this->assertEquals($value, $Item->getWeight());
 
         $value = $faker->randomFloat(2, 1);
-        $entity->setHeight($value);
-        $this->assertEquals($value, $entity->getHeight());
+        $Item->setHeight($value);
+        $this->assertEquals($value, $Item->getHeight());
 
         $value = $faker->randomFloat(2, 1);
-        $entity->setWidth($value);
-        $this->assertEquals($value, $entity->getWidth());
+        $Item->setWidth($value);
+        $this->assertEquals($value, $Item->getWidth());
 
         $value = $faker->randomFloat();
-        $entity->setDepth($value);
-        $this->assertEquals($value, $entity->getDepth());
-        $entity->setDepth(0);
-        $this->assertEquals(0, $entity->getDepth());
+        $Item->setDepth($value);
+        $this->assertEquals($value, $Item->getDepth());
+        $Item->setDepth(0);
+        $this->assertEquals(0, $Item->getDepth());
 
         $postition = new Position(0, 0, 0);
-        $entity->setPosition($postition);
-        $this->assertEquals(0, $entity->getPosition()->getPositionX());
-        $this->assertEquals(0, $entity->getPosition()->getPositionY());
-        $this->assertEquals(0, $entity->getPosition()->getPositionZ());
+        $Item->setPosition($postition);
+        $this->assertEquals(0, $Item->getPosition()->getPositionX());
+        $this->assertEquals(0, $Item->getPosition()->getPositionY());
+        $this->assertEquals(0, $Item->getPosition()->getPositionZ());
 
-        $entity->setAttributes([]);
-        $this->assertEquals([], $entity->getAttributes());
+        $Item->setAttributes([]);
+        $this->assertEquals([], $Item->getAttributes());
         $specialAttributes = [
             EntityAttributes::ENTITY_CONSUMABLE,
             EntityAttributes::ENTITY_RECHARGEABLE
         ];
-        $entity->setAttributes($specialAttributes);
-        $this->assertEquals($specialAttributes, $entity->getAttributes());
+        $Item->setAttributes($specialAttributes);
+        $this->assertEquals($specialAttributes, $Item->getAttributes());
     }
 
     /**
@@ -214,8 +212,8 @@ class EntityTest extends TestCase
     public function test_weight_with_values_below_zero()
     {
         $this->expectException(InvalidArgumentException::class);
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-        $entity->setWeight(-1);
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
+        $Item->setWeight(-1);
     }
 
     /**
@@ -230,8 +228,8 @@ class EntityTest extends TestCase
     public function test_height_with_values_below_zero()
     {
         $this->expectException(InvalidArgumentException::class);
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-        $entity->setHeight(-1);
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
+        $Item->setHeight(-1);
     }
 
     /**
@@ -246,8 +244,8 @@ class EntityTest extends TestCase
     public function test_width_with_values_below_zero()
     {
         $this->expectException(InvalidArgumentException::class);
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-        $entity->setWidth(-1);
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
+        $Item->setWidth(-1);
     }
 
     /**
@@ -262,8 +260,8 @@ class EntityTest extends TestCase
     public function test_depth_with_values_below_zero()
     {
         $this->expectException(InvalidArgumentException::class);
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-        $entity->setDepth(-1);
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
+        $Item->setDepth(-1);
     }
 
 
@@ -279,8 +277,8 @@ class EntityTest extends TestCase
     public function test_height_with_values_equals_to_zero()
     {
         $this->expectException(InvalidArgumentException::class);
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-        $entity->setHeight(0);
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
+        $Item->setHeight(0);
     }
 
     /**
@@ -295,8 +293,8 @@ class EntityTest extends TestCase
     public function test_width_with_values_equals_to_zero()
     {
         $this->expectException(InvalidArgumentException::class);
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-        $entity->setWidth(0);
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
+        $Item->setWidth(0);
     }
 
     /**
@@ -311,11 +309,11 @@ class EntityTest extends TestCase
      */
     public function test_volume_with_normal_values()
     {
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
-        $entity->setWidth(10);
-        $entity->setHeight(10);
-        $entity->setDepth(10);
-        $this->assertEquals(1000, $entity->getVolume());
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
+        $Item->setWidth(10);
+        $Item->setHeight(10);
+        $Item->setDepth(10);
+        $this->assertEquals(1000, $Item->getVolume());
     }
 
     /**
@@ -330,9 +328,9 @@ class EntityTest extends TestCase
      */
     public function test_volume_with_wrong_values()
     {
-        $entity = new Entity($this::ENTITY_NAME, $this::ENTITY_DESCRIPTION);
+        $Item = new Item($this::ITEM_NAME, $this::ITEM_DESCRIPTION);
 
         $this->expectException(CalculusImpossibleException::class);
-        $this->assertEquals(1000, $entity->getVolume());
+        $this->assertEquals(1000, $Item->getVolume());
     }
 }

@@ -7,7 +7,7 @@ use App\constants\Languages;
 use InvalidArgumentException;
 use Ramsey\Uuid\UuidInterface;
 
-class Game extends ASDbase
+class Game extends Base
 {
     /**
      * Author name
@@ -36,13 +36,6 @@ class Game extends ASDbase
      * @var string
      */
     protected string $version;
-
-    /**
-     * Game description
-     *
-     * @var string|null
-     */
-    protected ?string $description;
 
     /**
      * Score of the state in the game. It will be a percentage over 100.
@@ -108,7 +101,6 @@ class Game extends ASDbase
         $this->copyright = null;
         $this->title = null;
         $this->version = '0.0.1';
-        $this->description = null;
     }
 
     /**
@@ -238,38 +230,6 @@ class Game extends ASDbase
     public function setVersion(string $version): Game
     {
         $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the game description
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Aug.2024
-     *
-     * @return string|null
-     *
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the game description
-     *
-     * @author Cayetano H. Osma <chernandez@elestadoweb.com>
-     * @version Aug.2024
-     *
-     * @param  string  $description
-     *
-     * @return $this
-     *
-     */
-    public function setDescription(string $description): Game
-    {
-        $this->description = $description;
 
         return $this;
     }

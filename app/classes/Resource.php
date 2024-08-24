@@ -31,7 +31,7 @@ use App\exceptions\InvalidMimeTypeException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use InvalidArgumentException;
 
-class Resource extends ASDbase
+class Resource extends Base
 {
     /**
      * Hash of the resource content
