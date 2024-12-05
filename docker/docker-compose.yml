@@ -1,8 +1,8 @@
-version: '3'
 services:
     asd_httpd:
-        image: nginx:alpine
+        image: nginx:1.27-alpine
         container_name: ${HTTPD_CONTAINER}
+        restart: unless-stopped
         env_file:
             - ".env"
         ports:
@@ -23,8 +23,6 @@ services:
                 find ./bootstrap/cache -exec chown www-data:www-data {} \;
                 find ./bootstrap/cache -type f -exec chmod 777 {} \;
                 find ./bootstrap/cache -type d -exec chmod 777 {} \;
-#                composer install
-#                composer dump-autoload
         networks:
             - ${NETWORK}
         volumes:
@@ -38,6 +36,7 @@ services:
 
     asd_php:
         container_name: ${PHP_CONTAINER}
+        restart: unless-stopped
         env_file:
             - ".env"
         build:
@@ -56,6 +55,7 @@ services:
 
     asd_js:
         container_name: ${JS_CONTAINER}
+        restart: unless-stopped
         env_file:
             - ".env"
         build:
@@ -72,8 +72,9 @@ services:
             - ${JS_CODE_DIRECTORY}:/app
 
     asd_memcached:
-        image: memcached
+        image: memcached:1.6.32-alpine
         container_name: ${MEMCACHED_CONTAINER}
+        restart: unless-stopped
         #    restart: ${MEMCACHED_RESTART}
         env_file:
             - ".env"
