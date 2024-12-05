@@ -44,10 +44,6 @@ RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 RUN wget -O /usr/local/bin/phpunit https://phar.phpunit.de/phpunit-11.phar && chmod +x /usr/local/bin/phpunit
 
-RUN mkdir -p /usr/src/php/ext/imagick; \
-    curl -fsSL https://github.com/Imagick/imagick/archive/refs/tags/3.7.0.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1; \
-    docker-php-ext-install imagick;
-
 # https://github.com/docker-library/php/issues/1245
 # https://github.com/docker-library/php/issues/1245#issuecomment-1020146157
 ENV CFLAGS="$CFLAGS -D_GNU_SOURCE"

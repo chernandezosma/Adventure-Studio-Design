@@ -1,23 +1,38 @@
+# Exclusions
+!/docker/.envs
+
+# .env files
+.env
+.env.backup
+.env.production
+
+vendor/
 /vendor/
 node_modules/
+/node_modules/
 /.phpunit.cache
-/node_modules
+.phpunit.result.cache
+/.fleet
+/.vscode
+.DS_STORE
+
 /public/build
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
-/.fleet
-/.idea
-/.vscode
-
-.env
-.env.backup
-.env.production
+atlassian-ide-plugin.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
 .phpactor.json
 npm-debug.log
 yarn-error.log
 auth.json
+
+/.vagrant
+Homestead.yaml
+Homestead.json
 
 # Laravel 4 specific
 bootstrap/compiled.php
@@ -31,11 +46,8 @@ public/hot
 public_html/storage
 public_html/hot
 
-storage/*.key
-Homestead.yaml
-Homestead.json
-/.vagrant
-.phpunit.result.cache
+# Jetbrains idea based IDEs
+/.idea
 .idea
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -53,17 +65,14 @@ Homestead.json
 .idea/**/dbnavigator.xml
 .idea/**/gradle.xml
 .idea/**/libraries
-cmake-build-*/
 .idea/**/mongoSettings.xml
-*.iws
-out/
 .idea_modules/
-atlassian-ide-plugin.xml
 .idea/replstate.xml
 .idea/sonarlint/
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
 .idea/httpRequests
 .idea/caches/build_file_checksums.ser
+cmake-build-*/
+*.iws
+out/
+
+
